@@ -35,6 +35,44 @@ Or register a new account at `/Auth/Register`.
 
 ---
 
+## Install on Phone (PWA)
+
+Clothify is a **Progressive Web App** — it installs on your phone like a native app, no app store needed.
+
+### Step 1: Find your PC's IP
+
+```bash
+ipconfig
+```
+
+Look for `IPv4 Address` (e.g. `192.168.1.5`). Your phone must be on the **same WiFi**.
+
+### Step 2: Run the app
+
+```bash
+dotnet run --project src/Clothify.Web --urls "http://0.0.0.0:5010"
+```
+
+### Step 3: Install on your phone
+
+**Android (Chrome):**
+1. Open `http://192.168.1.5:5010` in Chrome
+2. Tap the **"Install Clothify"** banner at the bottom, OR
+3. Chrome menu (3 dots) > **"Add to Home Screen"**
+
+**iOS (Safari):**
+1. Open `http://192.168.1.5:5010` in Safari
+2. Tap the **Share** button (box with arrow)
+3. Scroll down > **"Add to Home Screen"** > **Add**
+
+### What you get
+- App icon on home screen (black "C" with gold "CLOTHIFY")
+- Opens fullscreen — no browser address bar
+- Offline support for cached pages and product images
+- App shortcuts: long-press icon for Search, Cart, Orders
+
+---
+
 ## Features
 
 ### Customer-Facing

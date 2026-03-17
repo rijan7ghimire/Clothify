@@ -238,66 +238,142 @@ namespace Clothify.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
+                            ImageUrl = "/images/categories/boys.jpg",
+                            Name = "Boys",
+                            Slug = "boys"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ImageUrl = "/images/categories/girls.jpg",
+                            Name = "Girls",
+                            Slug = "girls"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ImageUrl = "/images/categories/men.jpg",
                             Name = "Men",
                             Slug = "men"
                         },
                         new
                         {
-                            Id = 2,
+                            Id = 4,
+                            ImageUrl = "/images/categories/women.jpg",
                             Name = "Women",
                             Slug = "women"
                         },
                         new
                         {
-                            Id = 3,
-                            Name = "Kids",
-                            Slug = "kids"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Accessories",
-                            Slug = "accessories"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Sale",
-                            Slug = "sale"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Tops",
-                            ParentCategoryId = 2,
-                            Slug = "tops"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Bottoms",
-                            ParentCategoryId = 2,
-                            Slug = "bottoms"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Dresses",
-                            ParentCategoryId = 2,
-                            Slug = "dresses"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Outerwear",
-                            ParentCategoryId = 1,
-                            Slug = "outerwear"
-                        },
-                        new
-                        {
                             Id = 10,
-                            Name = "Shoes",
-                            Slug = "shoes"
+                            Name = "Boys Topwear",
+                            ParentCategoryId = 1,
+                            Slug = "boys-topwear"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Boys Bottomwear",
+                            ParentCategoryId = 1,
+                            Slug = "boys-bottomwear"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Boys Apparel Sets",
+                            ParentCategoryId = 1,
+                            Slug = "boys-apparel-sets"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "Boys Innerwear",
+                            ParentCategoryId = 1,
+                            Slug = "boys-innerwear"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Name = "Girls Topwear",
+                            ParentCategoryId = 2,
+                            Slug = "girls-topwear"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Name = "Girls Bottomwear",
+                            ParentCategoryId = 2,
+                            Slug = "girls-bottomwear"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Name = "Girls Dresses",
+                            ParentCategoryId = 2,
+                            Slug = "girls-dresses"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Name = "Girls Apparel Sets",
+                            ParentCategoryId = 2,
+                            Slug = "girls-apparel-sets"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Name = "Girls Innerwear",
+                            ParentCategoryId = 2,
+                            Slug = "girls-innerwear"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            Name = "Men Shoes",
+                            ParentCategoryId = 3,
+                            Slug = "men-shoes"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            Name = "Men Sandals",
+                            ParentCategoryId = 3,
+                            Slug = "men-sandals"
+                        },
+                        new
+                        {
+                            Id = 32,
+                            Name = "Men Flip Flops",
+                            ParentCategoryId = 3,
+                            Slug = "men-flip-flops"
+                        },
+                        new
+                        {
+                            Id = 40,
+                            Name = "Women Shoes",
+                            ParentCategoryId = 4,
+                            Slug = "women-shoes"
+                        },
+                        new
+                        {
+                            Id = 41,
+                            Name = "Women Sandals",
+                            ParentCategoryId = 4,
+                            Slug = "women-sandals"
+                        },
+                        new
+                        {
+                            Id = 42,
+                            Name = "Women Flip Flops",
+                            ParentCategoryId = 4,
+                            Slug = "women-flip-flops"
+                        },
+                        new
+                        {
+                            Id = 43,
+                            Name = "Women Heels",
+                            ParentCategoryId = 4,
+                            Slug = "women-heels"
                         });
                 });
 

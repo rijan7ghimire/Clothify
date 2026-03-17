@@ -13,29 +13,29 @@
 
 <!-- Category Horizontal Scroll -->
 <div class="category-scroll">
+    <a href="/Products?category=boys" class="category-item">
+        <div class="category-item__icon">👦</div>
+        <span class="category-item__label">Boys</span>
+    </a>
+    <a href="/Products?category=girls" class="category-item">
+        <div class="category-item__icon">👧</div>
+        <span class="category-item__label">Girls</span>
+    </a>
     <a href="/Products?category=men" class="category-item">
-        <div class="category-item__icon">👔</div>
-        <span class="category-item__label">Men</span>
+        <div class="category-item__icon">👟</div>
+        <span class="category-item__label">Men Shoes</span>
     </a>
     <a href="/Products?category=women" class="category-item">
+        <div class="category-item__icon">👠</div>
+        <span class="category-item__label">Women Shoes</span>
+    </a>
+    <a href="/Products?category=tops" class="category-item">
+        <div class="category-item__icon">👕</div>
+        <span class="category-item__label">Tops</span>
+    </a>
+    <a href="/Products?category=dresses" class="category-item">
         <div class="category-item__icon">👗</div>
-        <span class="category-item__label">Women</span>
-    </a>
-    <a href="/Products?category=kids" class="category-item">
-        <div class="category-item__icon">🧒</div>
-        <span class="category-item__label">Kids</span>
-    </a>
-    <a href="/Products?category=accessories" class="category-item">
-        <div class="category-item__icon">👜</div>
-        <span class="category-item__label">Accessories</span>
-    </a>
-    <a href="/Products?category=shoes" class="category-item">
-        <div class="category-item__icon">👟</div>
-        <span class="category-item__label">Shoes</span>
-    </a>
-    <a href="/Products?category=sale" class="category-item">
-        <div class="category-item__icon">🏷️</div>
-        <span class="category-item__label">Sale</span>
+        <span class="category-item__label">Dresses</span>
     </a>
 </div>
 
@@ -102,9 +102,7 @@
                     <button class="product-card__wishlist" onclick="event.preventDefault();Clothify.toggleWishlist(this,@product.Id)">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
                     </button>
-                    <div style="width:100%;height:100%;background:var(--color-surface);display:flex;align-items:center;justify-content:center;color:var(--color-text-light);font-size:2rem">
-                        👕
-                    </div>
+                    <img src="@product.ImageUrl" alt="@product.Name" loading="lazy" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0" />
                 </div>
                 <div class="product-card__info">
                     <span class="product-card__brand">@product.Brand</span>
@@ -122,19 +120,7 @@
     }
     else
     {
-        @for (int i = 0; i < 4; i++)
-        {
-            <div class="product-card">
-                <div class="product-card__image">
-                    <div style="width:100%;height:100%;background:var(--color-surface);display:flex;align-items:center;justify-content:center;color:var(--color-text-light);font-size:2rem">👕</div>
-                </div>
-                <div class="product-card__info">
-                    <span class="product-card__brand">CLOTHIFY</span>
-                    <h3 class="product-card__name">Sample Product @(i+1)</h3>
-                    <div class="product-card__price"><span class="current">$49.99</span></div>
-                </div>
-            </div>
-        }
+        <div class="empty-state"><p class="text-secondary">No featured products yet.</p></div>
     }
 </div>
 
@@ -152,7 +138,7 @@
             <a href="/Products/Detail/@product.Id" class="product-card">
                 <div class="product-card__image">
                     <span class="product-card__badge new">NEW</span>
-                    <div style="width:100%;height:100%;background:var(--color-surface);display:flex;align-items:center;justify-content:center;color:var(--color-text-light);font-size:2rem">👕</div>
+                    <img src="@product.ImageUrl" alt="@product.Name" loading="lazy" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0" />
                 </div>
                 <div class="product-card__info">
                     <span class="product-card__brand">@product.Brand</span>
@@ -164,20 +150,7 @@
     }
     else
     {
-        @for (int i = 0; i < 6; i++)
-        {
-            <div class="product-card">
-                <div class="product-card__image">
-                    <span class="product-card__badge new">NEW</span>
-                    <div style="width:100%;height:100%;background:var(--color-surface);display:flex;align-items:center;justify-content:center;color:var(--color-text-light);font-size:2rem">👗</div>
-                </div>
-                <div class="product-card__info">
-                    <span class="product-card__brand">CLOTHIFY</span>
-                    <h3 class="product-card__name">New Arrival @(i+1)</h3>
-                    <div class="product-card__price"><span class="current">$59.99</span></div>
-                </div>
-            </div>
-        }
+        <div class="empty-state"><p class="text-secondary">No new arrivals yet.</p></div>
     }
 </div>
 

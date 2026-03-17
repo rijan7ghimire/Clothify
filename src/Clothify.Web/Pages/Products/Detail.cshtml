@@ -18,15 +18,14 @@
                 {
                     @foreach (var img in p.Images)
                     {
-                        <div style="min-width:100%;aspect-ratio:3/4;background:var(--color-surface);display:flex;align-items:center;justify-content:center;font-size:4rem">👕</div>
+                        <div style="min-width:100%;aspect-ratio:3/4;background:var(--color-surface);position:relative">
+                            <img src="@img.ImageUrl" alt="@img.AltText" style="width:100%;height:100%;object-fit:contain" />
+                        </div>
                     }
                 }
                 else
                 {
-                    @for (int i = 0; i < 3; i++)
-                    {
-                        <div style="min-width:100%;aspect-ratio:3/4;background:var(--color-surface);display:flex;align-items:center;justify-content:center;font-size:4rem">👕</div>
-                    }
+                    <div style="min-width:100%;aspect-ratio:3/4;background:var(--color-surface);display:flex;align-items:center;justify-content:center;font-size:4rem">No Image</div>
                 }
             </div>
         </div>

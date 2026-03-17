@@ -65,11 +65,22 @@ dotnet run --project src/Clothify.Web --urls "http://0.0.0.0:5010"
 2. Tap the **Share** button (box with arrow)
 3. Scroll down > **"Add to Home Screen"** > **Add**
 
+### Firewall (if phone can't connect)
+
+Run this in an **admin terminal** on your PC:
+
+```powershell
+netsh advfirewall firewall add rule name="Clothify" dir=in action=allow protocol=TCP localport=5010
+```
+
 ### What you get
+
 - App icon on home screen (black "C" with gold "CLOTHIFY")
 - Opens fullscreen — no browser address bar
 - Offline support for cached pages and product images
 - App shortcuts: long-press icon for Search, Cart, Orders
+- Optimized for iPhone 17 / Dynamic Island (safe area insets)
+- Smooth scrolling, no rubber-band bounce, proper touch targets
 
 ---
 
@@ -98,11 +109,36 @@ dotnet run --project src/Clothify.Web --urls "http://0.0.0.0:5010"
 | Layer | Technology |
 |-------|-----------|
 | Backend | ASP.NET Core .NET 10, C# |
-| Frontend | Razor Pages + Custom CSS Framework (700+ lines) |
+| Frontend | Razor Pages + Custom CSS Framework (900+ lines) |
 | Database | SQLite via Entity Framework Core 10 |
 | Auth | ASP.NET Core Identity (cookie auth) |
 | Architecture | Clean Architecture (5 projects) |
 | API | RESTful with Swagger (`/swagger` on API project) |
+| Mobile | PWA (installable on Android/iOS, offline support) |
+| Payments | Khalti, eSewa, Cash on Delivery |
+| Currency | Nepali Rupees (Rs.) with 13% VAT |
+
+---
+
+## Mobile Compatibility
+
+Tested and optimized for:
+
+- iPhone 17 / 17 Pro / 17 Pro Max (Dynamic Island, safe areas)
+- iPhone 15/16 series (notch)
+- Android phones (Chrome PWA install)
+- iPad / Android tablets (3-column grid)
+- Desktop browsers (4-column grid, sidebar nav)
+
+**Key mobile optimizations:**
+
+- `viewport-fit=cover` for edge-to-edge rendering
+- `env(safe-area-inset-*)` for Dynamic Island, notch, and home indicator
+- 48px minimum touch targets on all buttons
+- 16px minimum input font size (prevents iOS auto-zoom)
+- `overscroll-behavior: contain` (no pull-to-refresh bounce in PWA)
+- Momentum scrolling on horizontal product carousels
+- Product images use `object-fit: cover` with 3:4 aspect ratio
 
 ---
 

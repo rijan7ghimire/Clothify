@@ -85,6 +85,8 @@ html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
+  /* Prevent overscroll bounce on iOS */
+  overscroll-behavior: none;
 }
 
 body {
@@ -93,10 +95,17 @@ body {
   line-height: 1.5;
   color: var(--color-text);
   background-color: var(--color-background);
-  padding-bottom: calc(var(--nav-height) + 16px);
+  /* Safe area: bottom nav + home indicator */
+  padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom, 16px) + 16px);
+  /* Safe area: top for Dynamic Island / notch */
+  padding-top: env(safe-area-inset-top, 0px);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   touch-action: manipulation;
+  /* Prevent pull-to-refresh on PWA */
+  overscroll-behavior-y: contain;
+  /* Smooth momentum scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
 }
 
 a {
@@ -219,11 +228,14 @@ ul, ol {
   top: 0;
   z-index: var(--z-sticky);
   background: var(--color-background);
-  height: var(--top-bar-height);
+  min-height: var(--top-bar-height);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--space-4);
+  /* Safe area for Dynamic Island / notch */
+  padding: env(safe-area-inset-top, 0px) var(--space-4) 0 var(--space-4);
+  padding-left: max(var(--space-4), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--space-4), env(safe-area-inset-right, 0px));
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -264,13 +276,16 @@ ul, ol {
   right: 0;
   z-index: var(--z-fixed);
   background: var(--color-background);
-  height: var(--nav-height);
   display: flex;
   align-items: center;
   justify-content: space-around;
   border-top: 1px solid var(--color-border);
   box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+  /* Height includes home indicator safe area */
+  height: calc(var(--nav-height) + env(safe-area-inset-bottom, 0px));
   padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
 }
 
 .bottom-nav__item {
@@ -421,14 +436,16 @@ ul, ol {
 /* ---------- Sticky Bottom CTA ---------- */
 .sticky-bottom {
   position: fixed;
-  bottom: var(--nav-height);
+  /* Sit above bottom nav + home indicator */
+  bottom: calc(var(--nav-height) + env(safe-area-inset-bottom, 0px));
   left: 0;
   right: 0;
   background: var(--color-background);
   padding: var(--space-3) var(--space-4);
+  padding-left: max(var(--space-4), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--space-4), env(safe-area-inset-right, 0px));
   border-top: 1px solid var(--color-border);
   z-index: var(--z-sticky);
-  padding-bottom: calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
 }
 
 /* ---------- Input Fields ---------- */
@@ -797,10 +814,14 @@ ul, ol {
   display: flex;
   gap: var(--space-3);
   padding: var(--space-2) var(--space-4);
+  padding-left: max(var(--space-4), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--space-4), env(safe-area-inset-right, 0px));
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   scroll-snap-type: x mandatory;
+  /* Prevent content from being cut off on notched phones */
+  scroll-padding-left: env(safe-area-inset-left, 0px);
 }
 
 .h-scroll::-webkit-scrollbar { display: none; }
@@ -1145,6 +1166,8 @@ ul, ol {
   transition: transform 0.3s ease;
   max-height: 85vh;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .bottom-sheet.show {
@@ -1459,6 +1482,70 @@ ul, ol {
   .show-mobile { display: block !important; }
   .data-table { font-size: var(--font-size-xs); }
   .data-table th, .data-table td { padding: var(--space-2); }
+
+  /* Prevent zoom on input focus (iOS) — inputs must be 16px+ */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  /* Better touch targets on mobile */
+  .btn { min-height: 48px; }
+  .chip { min-height: 40px; }
+  .profile-menu__item { min-height: 56px; }
+}
+
+/* ---------- iPhone / Notch / Dynamic Island ---------- */
+@supports (padding: env(safe-area-inset-top)) {
+  /* Ensure content doesn't hide behind Dynamic Island */
+  .top-bar {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  body {
+    padding-top: 0; /* top-bar handles it */
+  }
+
+  /* PWA standalone: no browser chrome, need full safe areas */
+  @media (display-mode: standalone) {
+    .top-bar {
+      padding-top: max(12px, env(safe-area-inset-top, 12px));
+    }
+
+    .bottom-nav {
+      padding-bottom: max(8px, env(safe-area-inset-bottom, 8px));
+      height: calc(var(--nav-height) + max(8px, env(safe-area-inset-bottom, 8px)));
+    }
+
+    body {
+      padding-bottom: calc(var(--nav-height) + max(8px, env(safe-area-inset-bottom, 8px)) + 16px);
+    }
+
+    .sticky-bottom {
+      bottom: calc(var(--nav-height) + max(8px, env(safe-area-inset-bottom, 8px)));
+    }
+  }
+}
+
+/* Tall phones (iPhone 17 Pro Max ~932px height, ~430px width) */
+@media (max-width: 430px) and (min-height: 800px) {
+  .hero-banner, [style*="aspect-ratio:16/9"] {
+    border-radius: var(--radius-lg);
+  }
+
+  .product-card__image {
+    /* Slightly taller cards on tall phones */
+    padding-top: 140%;
+  }
+
+  /* Bigger bottom nav icons on tall screens */
+  .bottom-nav__item .nav-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .bottom-nav__item {
+    font-size: 11px;
+  }
 }
 
 /* Desktop Nav (hidden on mobile) */

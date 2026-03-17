@@ -1,0 +1,41 @@
+{
+  "name": "Clothify",
+  "short_name": "Clothify",
+  "description": "Mobile-first fashion e-commerce platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#111111",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["shopping", "fashion"],
+  "lang": "en",
+  "shortcuts": [
+    {
+      "name": "Search Products",
+      "url": "/Products/Search"
+    },
+    {
+      "name": "My Cart",
+      "url": "/Cart"
+    },
+    {
+      "name": "My Orders",
+      "url": "/Orders"
+    }
+  ]
+}

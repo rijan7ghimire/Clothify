@@ -34,38 +34,54 @@
         @Html.AntiForgeryToken()
 
         <!-- Shipping Address -->
-        <h3 class="text-lg font-bold mb-4">Shipping Address</h3>
+        <div class="flex items-center justify-between mb-3">
+            <h3 class="text-lg font-bold">Shipping Address</h3>
+            @if (!string.IsNullOrEmpty(Model.UserFullName))
+            {
+                <label class="checkbox" style="min-height:auto">
+                    <input type="checkbox" id="autofill-check" onchange="toggleAutofill(this.checked)" />
+                    <span class="text-sm">Same as me</span>
+                </label>
+            }
+        </div>
 
         <div class="form-group">
             <label class="form-label">Full Name</label>
-            <input type="text" name="FullName" class="form-input" placeholder="Ram Sharma" required />
+            <input type="text" name="FullName" id="af-name" class="form-input" placeholder="Ram Sharma" required
+                   value="@(Model.SavedAddress?.FullName ?? "")" />
         </div>
         <div class="form-group">
             <label class="form-label">Street Address</label>
-            <input type="text" name="StreetLine1" class="form-input" placeholder="Putalisadak, Kathmandu" required />
+            <input type="text" name="StreetLine1" id="af-street" class="form-input" placeholder="Putalisadak, Kathmandu" required
+                   value="@(Model.SavedAddress?.StreetLine1 ?? "")" />
         </div>
         <div class="form-group">
             <label class="form-label">Landmark (Optional)</label>
-            <input type="text" name="StreetLine2" class="form-input" placeholder="Near Shankar Dev Campus" />
+            <input type="text" name="StreetLine2" id="af-street2" class="form-input" placeholder="Near Shankar Dev Campus"
+                   value="@(Model.SavedAddress?.StreetLine2 ?? "")" />
         </div>
         <div class="flex gap-3">
             <div class="form-group flex-1">
                 <label class="form-label">City</label>
-                <input type="text" name="City" class="form-input" placeholder="Kathmandu" required />
+                <input type="text" name="City" id="af-city" class="form-input" placeholder="Kathmandu" required
+                       value="@(Model.SavedAddress?.City ?? "")" />
             </div>
             <div class="form-group flex-1">
                 <label class="form-label">State/Province</label>
-                <input type="text" name="State" class="form-input" placeholder="Bagmati" required />
+                <input type="text" name="State" id="af-state" class="form-input" placeholder="Bagmati" required
+                       value="@(Model.SavedAddress?.State ?? "")" />
             </div>
         </div>
         <div class="flex gap-3">
             <div class="form-group flex-1">
                 <label class="form-label">ZIP Code</label>
-                <input type="text" name="ZipCode" class="form-input" placeholder="44600" required />
+                <input type="text" name="ZipCode" id="af-zip" class="form-input" placeholder="44600" required
+                       value="@(Model.SavedAddress?.ZipCode ?? "")" />
             </div>
             <div class="form-group flex-1">
                 <label class="form-label">Phone</label>
-                <input type="tel" name="Phone" class="form-input" placeholder="+977-98XXXXXXXX" required />
+                <input type="tel" name="Phone" id="af-phone" class="form-input" placeholder="+977-98XXXXXXXX" required
+                       value="@(Model.SavedAddress?.Phone ?? Model.UserPhone ?? "")" />
             </div>
         </div>
 
@@ -124,4 +140,23 @@
             Place Order &mdash; $@Model.Cart.Total.ToString("N2")
         </button>
     </form>
+
+    <script>
+        function toggleAutofill(checked) {
+            if (checked) {
+                document.getElementById('af-name').value = '@(Model.UserFullName?.Replace("'", "\\'") ?? "")';
+                document.getElementById('af-phone').value = '@(Model.UserPhone?.Replace("'", "\\'") ?? "")';
+                @if (Model.SavedAddress != null)
+                {
+                    <text>
+                    document.getElementById('af-street').value = '@(Model.SavedAddress.StreetLine1.Replace("'", "\\'"))';
+                    document.getElementById('af-street2').value = '@(Model.SavedAddress.StreetLine2?.Replace("'", "\\'") ?? "")';
+                    document.getElementById('af-city').value = '@(Model.SavedAddress.City.Replace("'", "\\'"))';
+                    document.getElementById('af-state').value = '@(Model.SavedAddress.State.Replace("'", "\\'"))';
+                    document.getElementById('af-zip').value = '@(Model.SavedAddress.ZipCode.Replace("'", "\\'"))';
+                    </text>
+                }
+            }
+        }
+    </script>
 }

@@ -67,7 +67,7 @@ const Clothify = {
 
     // Quantity selector
     initQuantitySelectors() {
-        document.querySelectorAll('.qty-selector').forEach(selector => {
+        document.querySelectorAll('.qty-selector:not([data-manual])').forEach(selector => {
             const minus = selector.querySelector('.qty-minus');
             const plus = selector.querySelector('.qty-plus');
             const count = selector.querySelector('.qty-selector__count');

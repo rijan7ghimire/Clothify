@@ -1,0 +1,43 @@
+@page "/Profile/Edit"
+@model Clothify.Web.Pages.Profile.EditModel
+@{
+    ViewData["Title"] = "Edit Profile";
+    ViewData["ShowBack"] = true;
+    ViewData["PageTitle"] = "Personal Information";
+}
+
+<div class="px-4 py-4">
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <div style="background:#E8F5E9;color:#2E7D32;padding:12px 16px;border-radius:var(--radius-md);margin-bottom:16px;font-size:14px">
+            &#10003; @Model.SuccessMessage
+        </div>
+    }
+
+    <form method="post">
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input type="text" name="FirstName" class="form-input" value="@Model.FirstName" required />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input type="text" name="LastName" class="form-input" value="@Model.LastName" required />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <input type="tel" name="PhoneNumber" class="form-input" value="@Model.PhoneNumber" placeholder="+977-98XXXXXXXX" />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Gender</label>
+            <select name="Gender" class="form-input" id="gender-sel">
+                <option value="">Prefer not to say</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+            <script>document.getElementById('gender-sel').value = '@(Model.Gender ?? "")';</script>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg mt-4">Save Changes</button>
+    </form>
+</div>

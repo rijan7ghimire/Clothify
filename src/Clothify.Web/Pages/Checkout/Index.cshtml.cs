@@ -1,9 +1,13 @@
 using System.Security.Claims;
 using Clothify.Application.DTOs.Request;
 using Clothify.Application.DTOs.Response;
+using Clothify.Application.Mappings;
 using Clothify.Application.Services;
+using Clothify.Core.Entities;
 using Clothify.Core.Enums;
+using Clothify.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -14,15 +18,25 @@ public class CheckoutModel : PageModel
 {
     private readonly IOrderService _orderService;
     private readonly ICartService _cartService;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CheckoutModel(IOrderService orderService, ICartService cartService)
+    public CheckoutModel(IOrderService orderService, ICartService cartService,
+        UserManager<ApplicationUser> userManager, IUnitOfWork unitOfWork)
     {
         _orderService = orderService;
         _cartService = cartService;
+        _userManager = userManager;
+        _unitOfWork = unitOfWork;
     }
 
     public CartResponse? Cart { get; set; }
     public string? ErrorMessage { get; set; }
+
+    // User info for autofill
+    public string UserFullName { get; set; } = "";
+    public string UserPhone { get; set; } = "";
+    public AddressResponse? SavedAddress { get; set; }
 
     public async Task<IActionResult> OnGetAsync()
     {
@@ -30,6 +44,28 @@ public class CheckoutModel : PageModel
         Cart = await _cartService.GetCartAsync(userId);
         if (Cart == null || !Cart.Items.Any())
             return RedirectToPage("/Cart/Index");
+
+        // Load user info for autofill
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user != null)
+        {
+            UserFullName = $"{user.FirstName} {user.LastName}".Trim();
+            UserPhone = user.PhoneNumber ?? "";
+        }
+
+        // Load saved default address
+        var addresses = await _unitOfWork.Repository<Address>().FindAsync(a => a.UserId == userId && a.IsDefault);
+        var addr = addresses.FirstOrDefault();
+        if (addr != null)
+        {
+            SavedAddress = new AddressResponse
+            {
+                FullName = addr.FullName, StreetLine1 = addr.StreetLine1,
+                StreetLine2 = addr.StreetLine2, City = addr.City,
+                State = addr.State, ZipCode = addr.ZipCode, Phone = addr.Phone
+            };
+        }
+
         return Page();
     }
 
@@ -64,13 +100,9 @@ public class CheckoutModel : PageModel
 
             var order = await _orderService.PlaceOrderAsync(userId, request);
 
-            // For Khalti/eSewa, redirect to payment simulation page
             if (paymentMethod is "Khalti" or "eSewa")
-            {
                 return RedirectToPage("/Checkout/Payment", new { orderId = order.Id, method = paymentMethod });
-            }
 
-            // For COD, go directly to confirmation
             return RedirectToPage("/Orders/Confirmation", new { id = order.Id });
         }
         catch (Exception ex)

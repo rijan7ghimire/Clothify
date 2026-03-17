@@ -51,7 +51,7 @@ public class AdminDashboardModel : PageModel
 
             Dashboard = new AdminDashboardResponse
             {
-                Revenue = new KpiCard { Label = "Revenue", Value = $"${revenue:N2}" },
+                Revenue = new KpiCard { Label = "Revenue", Value = $"Rs. {revenue:N0}" },
                 TotalOrders = new KpiCard { Label = "Orders", Value = orderCount.ToString() },
                 RecentOrders = recentOrders.Select(o => new AdminOrderSummary
                 {

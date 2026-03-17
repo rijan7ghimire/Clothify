@@ -74,10 +74,10 @@ else
                         <span class="product-card__brand">@product.Brand</span>
                         <h3 class="product-card__name">@product.Name</h3>
                         <div class="product-card__price">
-                            <span class="current">$@product.Price.ToString("N2")</span>
+                            <span class="current">Rs. @product.Price.ToString("N2")</span>
                             @if (product.OriginalPrice.HasValue)
                             {
-                                <span class="original">$@product.OriginalPrice.Value.ToString("N2")</span>
+                                <span class="original">Rs. @product.OriginalPrice.Value.ToString("N2")</span>
                             }
                         </div>
                     </div>

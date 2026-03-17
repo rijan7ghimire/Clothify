@@ -67,14 +67,14 @@ public class OrderService : IOrderService
         var orderNumber = await _unitOfWork.Orders.GenerateOrderNumberAsync();
         var shippingCost = request.ShippingMethod switch
         {
-            ShippingMethod.Express => 9.99m,
-            ShippingMethod.NextDay => 19.99m,
+            ShippingMethod.Express => 500m,
+            ShippingMethod.NextDay => 1500m,
             _ => 0m
         };
 
         var subtotal = cart.Items.Sum(i =>
             (i.ProductVariant.PriceOverride ?? i.ProductVariant.Product.DiscountPrice ?? i.ProductVariant.Product.BasePrice) * i.Quantity);
-        var tax = subtotal * 0.08m;
+        var tax = Math.Round(subtotal * 0.13m, 2);
 
         var order = new Order
         {

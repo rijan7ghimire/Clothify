@@ -101,19 +101,19 @@ public static class DataSeeder
             while (usedSlugs.Contains(slug)) slug = $"{baseSlug}-{sc++}";
             usedSlugs.Add(slug);
 
-            // Price based on category
+            // Price in Nepali Rupees (NPR)
             var basePrice = (gender, subCategory) switch
             {
-                ("Men", "Shoes") => rand.Next(40, 150) + 0.99m,
-                ("Women", "Shoes") => rand.Next(35, 130) + 0.99m,
-                (_, "Sandal") => rand.Next(20, 70) + 0.99m,
-                (_, "Flip Flops") => rand.Next(10, 40) + 0.99m,
-                (_, "Dress") => rand.Next(25, 80) + 0.99m,
-                (_, "Topwear") => rand.Next(12, 50) + 0.99m,
-                (_, "Bottomwear") => rand.Next(15, 55) + 0.99m,
-                (_, "Apparel Set") => rand.Next(30, 70) + 0.99m,
-                _ => rand.Next(15, 60) + 0.99m,
-            };
+                ("Men", "Shoes") => rand.Next(3500, 18000),
+                ("Women", "Shoes") => rand.Next(2500, 15000),
+                (_, "Sandal") => rand.Next(1500, 6000),
+                (_, "Flip Flops") => rand.Next(500, 3000),
+                (_, "Dress") => rand.Next(1800, 8000),
+                (_, "Topwear") => rand.Next(800, 4500),
+                (_, "Bottomwear") => rand.Next(1200, 5500),
+                (_, "Apparel Set") => rand.Next(2500, 7000),
+                _ => rand.Next(1000, 5000),
+            } + 0m;
 
             decimal? discountPrice = rand.NextDouble() < 0.3
                 ? Math.Round(basePrice * (1 - rand.Next(10, 40) / 100m), 2)
@@ -222,9 +222,9 @@ public static class DataSeeder
                 UserId = customer.Id, OrderNumber = $"CLT-{placedDate:yyyyMMdd}-{(i + 1):D4}",
                 Status = status, ShippingAddressId = address.Id,
                 ShippingMethod = ShippingMethod.Standard, PaymentMethod = PaymentMethod.CreditCard,
-                Subtotal = subtotal, ShippingCost = subtotal >= 50 ? 0 : 5.99m, Discount = 0,
-                Tax = Math.Round(subtotal * 0.08m, 2),
-                Total = Math.Round(subtotal + (subtotal >= 50 ? 0 : 5.99m) + subtotal * 0.08m, 2),
+                Subtotal = subtotal, ShippingCost = subtotal >= 5000 ? 0 : 150m, Discount = 0,
+                Tax = Math.Round(subtotal * 0.13m, 2),
+                Total = Math.Round(subtotal + (subtotal >= 5000 ? 0 : 150m) + subtotal * 0.13m, 2),
                 PlacedAt = placedDate,
                 ShippedAt = status >= OrderStatus.Shipped ? placedDate.AddDays(2) : null,
                 DeliveredAt = status == OrderStatus.Delivered ? placedDate.AddDays(6) : null,
@@ -237,9 +237,9 @@ public static class DataSeeder
 
         // ─── COUPONS ───
         await context.Coupons.AddRangeAsync(
-            new Coupon { Code = "WELCOME20", DiscountType = DiscountType.Percentage, DiscountValue = 20, MinOrderAmount = 50, MaxUses = 1000, ExpiresAt = DateTime.UtcNow.AddMonths(3) },
-            new Coupon { Code = "SAVE10", DiscountType = DiscountType.Fixed, DiscountValue = 10, MinOrderAmount = 75, MaxUses = 500, ExpiresAt = DateTime.UtcNow.AddMonths(1) },
-            new Coupon { Code = "SPRING30", DiscountType = DiscountType.Percentage, DiscountValue = 30, MinOrderAmount = 100, MaxUses = 200, ExpiresAt = DateTime.UtcNow.AddDays(14) }
+            new Coupon { Code = "WELCOME20", DiscountType = DiscountType.Percentage, DiscountValue = 20, MinOrderAmount = 3000, MaxUses = 1000, ExpiresAt = DateTime.UtcNow.AddMonths(3) },
+            new Coupon { Code = "SAVE500", DiscountType = DiscountType.Fixed, DiscountValue = 500, MinOrderAmount = 5000, MaxUses = 500, ExpiresAt = DateTime.UtcNow.AddMonths(1) },
+            new Coupon { Code = "SPRING30", DiscountType = DiscountType.Percentage, DiscountValue = 30, MinOrderAmount = 8000, MaxUses = 200, ExpiresAt = DateTime.UtcNow.AddDays(14) }
         );
         await context.SaveChangesAsync();
         Console.WriteLine("Seeding complete!");

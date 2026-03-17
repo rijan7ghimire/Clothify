@@ -36,7 +36,7 @@
         <!-- Payment Form -->
         <div class="card p-5" style="border-radius:var(--radius-lg)">
             <div class="text-center mb-6">
-                <span class="text-3xl font-bold">$@Model.Amount.ToString("N2")</span>
+                <span class="text-3xl font-bold">Rs. @Model.Amount.ToString("N2")</span>
                 <p class="text-sm text-secondary mt-1">Total Amount</p>
             </div>
 
@@ -59,7 +59,7 @@
 
                 <button type="submit" class="btn btn-block btn-lg mt-4"
                         style="background:@(Model.Method == "Khalti" ? "#5C2D91" : "#60BB46");color:white">
-                    Pay $@Model.Amount.ToString("N2")
+                    Pay Rs. @Model.Amount.ToString("N2")
                 </button>
             </form>
 

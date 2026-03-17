@@ -27,7 +27,7 @@
                     <p class="cart-item__variant">@item.Size · @item.Color</p>
                 </div>
                 <div class="cart-item__bottom">
-                    <span class="cart-item__price">$@item.Subtotal.ToString("N2")</span>
+                    <span class="cart-item__price">Rs. @item.Subtotal.ToString("N2")</span>
                     <div class="qty-selector">
                         <button class="qty-minus" @(item.Quantity <= 1 ? "disabled" : "")>−</button>
                         <span class="qty-selector__count">@item.Quantity</span>
@@ -53,13 +53,13 @@
     <div class="order-summary">
         <div class="order-summary__row">
             <span>Subtotal</span>
-            <span>$@Model.Cart.Subtotal.ToString("N2")</span>
+            <span>Rs. @Model.Cart.Subtotal.ToString("N2")</span>
         </div>
         @if (Model.Cart.Discount > 0)
         {
             <div class="order-summary__row">
                 <span>Discount</span>
-                <span class="discount">-$@Model.Cart.Discount.ToString("N2")</span>
+                <span class="discount">-Rs. @Model.Cart.Discount.ToString("N2")</span>
             </div>
         }
         <div class="order-summary__row">
@@ -68,11 +68,11 @@
         </div>
         <div class="order-summary__row">
             <span>Tax</span>
-            <span>$@Model.Cart.Tax.ToString("N2")</span>
+            <span>Rs. @Model.Cart.Tax.ToString("N2")</span>
         </div>
         <div class="order-summary__row total">
             <span>Total</span>
-            <span>$@Model.Cart.Total.ToString("N2")</span>
+            <span>Rs. @Model.Cart.Total.ToString("N2")</span>
         </div>
     </div>
 
@@ -81,7 +81,7 @@
     <!-- Checkout Button -->
     <div class="sticky-bottom">
         <a href="/Checkout" class="text-center text-sm text-accent font-medium" style="display:block;margin-bottom:var(--space-2)">Continue Shopping</a>
-        <a href="/Checkout" class="btn btn-primary btn-block btn-lg">Proceed to Checkout — $@Model.Cart.Total.ToString("N2")</a>
+        <a href="/Checkout" class="btn btn-primary btn-block btn-lg">Proceed to Checkout — Rs. @Model.Cart.Total.ToString("N2")</a>
     </div>
 }
 else

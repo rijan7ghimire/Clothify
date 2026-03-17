@@ -121,9 +121,9 @@ public class CartService : ICartService
             Id = cart.Id,
             Items = items,
             Subtotal = subtotal,
-            ShippingCost = subtotal >= 50 ? 0 : 5.99m,
-            Tax = subtotal * 0.08m,
-            Total = subtotal + (subtotal >= 50 ? 0 : 5.99m) + (subtotal * 0.08m),
+            ShippingCost = subtotal >= 5000 ? 0 : 150m,
+            Tax = Math.Round(subtotal * 0.13m, 2),
+            Total = Math.Round(subtotal + (subtotal >= 5000 ? 0 : 150m) + (subtotal * 0.13m), 2),
             ItemCount = items.Sum(i => i.Quantity)
         };
     }

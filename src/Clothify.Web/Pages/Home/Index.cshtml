@@ -81,7 +81,7 @@
         <div style="position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,0.7))"></div>
         <div style="position:absolute;bottom:0;left:0;right:0;padding:var(--space-5);color:white">
             <div style="font-size:var(--font-size-xl);font-weight:700">Men's Shoes</div>
-            <div style="font-size:var(--font-size-sm);opacity:0.9;margin:var(--space-1) 0 var(--space-3)">Free shipping on orders over $50</div>
+            <div style="font-size:var(--font-size-sm);opacity:0.9;margin:var(--space-1) 0 var(--space-3)">Free shipping on orders over Rs. 5,000</div>
             <span class="btn btn-primary" style="display:inline-block">Shop Now</span>
         </div>
     </a>
@@ -113,10 +113,10 @@
                     <span class="product-card__brand">@product.Brand</span>
                     <h3 class="product-card__name">@product.Name</h3>
                     <div class="product-card__price">
-                        <span class="current">$@product.Price.ToString("N2")</span>
+                        <span class="current">Rs. @product.Price.ToString("N2")</span>
                         @if (product.OriginalPrice.HasValue)
                         {
-                            <span class="original">$@product.OriginalPrice.Value.ToString("N2")</span>
+                            <span class="original">Rs. @product.OriginalPrice.Value.ToString("N2")</span>
                         }
                     </div>
                 </div>
@@ -148,7 +148,7 @@
                 <div class="product-card__info">
                     <span class="product-card__brand">@product.Brand</span>
                     <h3 class="product-card__name">@product.Name</h3>
-                    <div class="product-card__price"><span class="current">$@product.Price.ToString("N2")</span></div>
+                    <div class="product-card__price"><span class="current">Rs. @product.Price.ToString("N2")</span></div>
                 </div>
             </a>
         }

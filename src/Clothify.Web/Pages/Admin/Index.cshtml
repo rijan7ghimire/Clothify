@@ -55,7 +55,7 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-card__label">Revenue</div>
-                <div class="stat-card__value">$@(Model.Dashboard?.Revenue.Value ?? "$45,231")</div>
+                <div class="stat-card__value">Rs. @(Model.Dashboard?.Revenue.Value ?? "Rs. 45,231")</div>
                 <div class="stat-card__change positive">+12.5%</div>
             </div>
             <div class="stat-card">
@@ -108,7 +108,7 @@
                             <tr>
                                 <td class="font-medium">@order.OrderNumber</td>
                                 <td>@order.CustomerName</td>
-                                <td class="font-semibold">$@order.Total.ToString("N2")</td>
+                                <td class="font-semibold">Rs. @order.Total.ToString("N2")</td>
                                 <td>
                                     <span class="badge @(order.Status switch { "Delivered" => "badge-success", "Confirmed" => "badge-info", "Shipped" => "badge-info", "Processing" => "badge-warning", "Placed" => "badge-warning", "Cancelled" => "badge-error", _ => "badge-neutral" })">
                                         @order.Status
@@ -143,7 +143,7 @@
                             <tr>
                                 <td class="font-medium">#CLT-2026031@(i+1)</td>
                                 <td>Customer @(i+1)</td>
-                                <td class="font-semibold">$@((49.99m * (i+1)).ToString("N2"))</td>
+                                <td class="font-semibold">Rs. @((49.99m * (i+1)).ToString("N2"))</td>
                                 <td><span class="badge @statuses[i].Item2">@statuses[i].Item1</span></td>
                                 <td class="text-secondary">Mar @(17-i)</td>
                             </tr>

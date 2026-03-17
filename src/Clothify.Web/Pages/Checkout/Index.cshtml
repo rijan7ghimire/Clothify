@@ -97,7 +97,7 @@
             <label class="card p-3 flex items-center gap-3 border" style="cursor:pointer;border-radius:var(--radius-md)">
                 <input type="radio" name="ShippingMethod" value="Express" />
                 <div class="flex-1">
-                    <div class="flex justify-between"><span class="font-medium text-sm">Express (2-3 days)</span><span class="font-semibold text-sm">$9.99</span></div>
+                    <div class="flex justify-between"><span class="font-medium text-sm">Express (2-3 days)</span><span class="font-semibold text-sm">Rs. 500</span></div>
                 </div>
             </label>
         </div>
@@ -130,14 +130,14 @@
 
         <!-- Order Summary -->
         <div class="order-summary border mb-4" style="border-radius:var(--radius-lg)">
-            <div class="order-summary__row"><span>Subtotal</span><span>$@Model.Cart.Subtotal.ToString("N2")</span></div>
+            <div class="order-summary__row"><span>Subtotal</span><span>Rs. @Model.Cart.Subtotal.ToString("N2")</span></div>
             <div class="order-summary__row"><span>Shipping</span><span>@(Model.Cart.ShippingCost == 0 ? "Free" : $"${Model.Cart.ShippingCost:N2}")</span></div>
-            <div class="order-summary__row"><span>Tax</span><span>$@Model.Cart.Tax.ToString("N2")</span></div>
-            <div class="order-summary__row total"><span>Total</span><span>$@Model.Cart.Total.ToString("N2")</span></div>
+            <div class="order-summary__row"><span>Tax</span><span>Rs. @Model.Cart.Tax.ToString("N2")</span></div>
+            <div class="order-summary__row total"><span>Total</span><span>Rs. @Model.Cart.Total.ToString("N2")</span></div>
         </div>
 
         <button type="submit" class="btn btn-primary btn-block btn-lg mb-6">
-            Place Order &mdash; $@Model.Cart.Total.ToString("N2")
+            Place Order &mdash; Rs. @Model.Cart.Total.ToString("N2")
         </button>
     </form>
 

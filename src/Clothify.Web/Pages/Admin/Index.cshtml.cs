@@ -1,0 +1,56 @@
+using Clothify.Application.DTOs.Response;
+using Clothify.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace Clothify.Web.Pages.Admin;
+
+[Authorize(Roles = "Admin")]
+public class AdminDashboardModel : PageModel
+{
+    private readonly IUnitOfWork _unitOfWork;
+
+    public AdminDashboardModel(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+
+    public AdminDashboardResponse? Dashboard { get; set; }
+
+    public async Task OnGetAsync()
+    {
+        try
+        {
+            var from = DateTime.UtcNow.AddDays(-30);
+            var to = DateTime.UtcNow;
+
+            var revenue = await _unitOfWork.Orders.GetRevenueAsync(from, to);
+            var orderCount = await _unitOfWork.Orders.GetOrderCountAsync(from, to);
+            var recentOrders = await _unitOfWork.Orders.GetRecentOrdersAsync(10);
+            var lowStock = await _unitOfWork.Products.GetLowStockProductsAsync(5);
+
+            Dashboard = new AdminDashboardResponse
+            {
+                Revenue = new KpiCard { Label = "Revenue", Value = $"${revenue:N2}" },
+                TotalOrders = new KpiCard { Label = "Orders", Value = orderCount.ToString() },
+                RecentOrders = recentOrders.Select(o => new AdminOrderSummary
+                {
+                    Id = o.Id,
+                    OrderNumber = o.OrderNumber,
+                    CustomerName = $"{o.User.FirstName} {o.User.LastName}",
+                    ItemCount = o.Items.Sum(i => i.Quantity),
+                    Total = o.Total,
+                    Status = o.Status.ToString(),
+                    Date = o.PlacedAt
+                }).ToList(),
+                LowStockAlerts = lowStock.SelectMany(p => p.Variants
+                    .Where(v => v.StockQuantity <= 5)
+                    .Select(v => new LowStockAlert
+                    {
+                        ProductId = p.Id,
+                        ProductName = p.Name,
+                        VariantInfo = $"{v.Size} / {v.Color}",
+                        CurrentStock = v.StockQuantity
+                    })).ToList()
+            };
+        }
+        catch { }
+    }
+}

@@ -1,0 +1,190 @@
+@page "/Products/Detail/{id:int}"
+@model Clothify.Web.Pages.Products.DetailModel
+@{
+    ViewData["Title"] = Model.Product?.Name ?? "Product";
+    ViewData["ShowBack"] = true;
+    ViewData["PageTitle"] = "";
+}
+
+@if (Model.Product != null)
+{
+    var p = Model.Product;
+
+    <!-- Image Carousel -->
+    <div data-carousel style="margin:-1px -16px 0">
+        <div style="position:relative;overflow:hidden">
+            <div class="carousel-track" style="display:flex;transition:transform 0.4s ease">
+                @if (p.Images.Any())
+                {
+                    @foreach (var img in p.Images)
+                    {
+                        <div style="min-width:100%;aspect-ratio:3/4;background:var(--color-surface);display:flex;align-items:center;justify-content:center;font-size:4rem">👕</div>
+                    }
+                }
+                else
+                {
+                    @for (int i = 0; i < 3; i++)
+                    {
+                        <div style="min-width:100%;aspect-ratio:3/4;background:var(--color-surface);display:flex;align-items:center;justify-content:center;font-size:4rem">👕</div>
+                    }
+                }
+            </div>
+        </div>
+        <div class="carousel-dots">
+            @for (int i = 0; i < Math.Max(p.Images.Count, 3); i++)
+            {
+                <span class="dot @(i == 0 ? "active" : "")"></span>
+            }
+        </div>
+    </div>
+
+    <!-- Product Info -->
+    <div class="p-4">
+        <span class="text-xs text-uppercase text-secondary font-semibold">@p.Brand</span>
+        <h1 class="text-xl font-bold mt-1">@p.Name</h1>
+
+        <div class="flex items-center gap-3 mt-2">
+            <span class="text-xl font-bold">$@p.Price.ToString("N2")</span>
+            @if (p.OriginalPrice.HasValue)
+            {
+                <span class="text-sm text-light line-through">$@p.OriginalPrice.Value.ToString("N2")</span>
+                <span class="badge badge-error">-@p.DiscountPercent%</span>
+            }
+        </div>
+
+        <!-- Rating -->
+        @if (p.ReviewCount > 0)
+        {
+            <div class="flex items-center gap-2 mt-2">
+                <div class="star-rating">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        <span class="star @(i <= Math.Round(p.AverageRating) ? "" : "empty")">★</span>
+                    }
+                </div>
+                <span class="text-sm text-secondary">@p.AverageRating.ToString("N1") (@p.ReviewCount reviews)</span>
+            </div>
+        }
+    </div>
+
+    <!-- Size Selection -->
+    <div class="px-4 mb-4">
+        <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-semibold">Select Size</h3>
+            <button class="text-sm text-accent font-medium">Size Guide</button>
+        </div>
+        <div class="flex flex-wrap gap-2" data-chip-group id="size-chips">
+            @{
+                var sizes = p.Variants.Select(v => v.Size).Distinct();
+            }
+            @foreach (var size in sizes)
+            {
+                var inStock = p.Variants.Any(v => v.Size == size && v.StockQuantity > 0);
+                <span class="chip @(!inStock ? "disabled" : "")" style="@(!inStock ? "opacity:0.4;text-decoration:line-through;pointer-events:none" : "")" data-size="@size">@size</span>
+            }
+        </div>
+    </div>
+
+    <!-- Color Selection -->
+    <div class="px-4 mb-4">
+        <h3 class="text-sm font-semibold mb-3">Color: <span id="selected-color" class="font-normal text-secondary">Select</span></h3>
+        <div class="flex gap-3" data-color-group>
+            @{
+                var colors = p.Variants.Select(v => v.Color).Distinct();
+                var colorMap = new Dictionary<string, string>
+                {
+                    ["Black"] = "#111", ["White"] = "#FFF", ["Red"] = "#C62828", ["Blue"] = "#1565C0",
+                    ["Green"] = "#2E7D32", ["Beige"] = "#D4C5A9", ["Navy"] = "#1A237E", ["Grey"] = "#9E9E9E",
+                    ["Brown"] = "#5D4037", ["Pink"] = "#F48FB1"
+                };
+            }
+            @foreach (var color in colors)
+            {
+                var hex = colorMap.GetValueOrDefault(color, "#999");
+                <span class="color-circle" style="background:@hex;@(color == "White" ? "border:1px solid #ddd" : "")" title="@color" onclick="document.getElementById('selected-color').textContent='@color'"></span>
+            }
+        </div>
+    </div>
+
+    <!-- Quantity -->
+    <div class="px-4 mb-4">
+        <h3 class="text-sm font-semibold mb-3">Quantity</h3>
+        <div class="qty-selector">
+            <button class="qty-minus" disabled>−</button>
+            <span class="qty-selector__count">1</span>
+            <button class="qty-plus">+</button>
+        </div>
+    </div>
+
+    <!-- Description Accordion -->
+    <div class="accordion">
+        <div class="accordion__item open">
+            <div class="accordion__header">
+                Description
+                <span class="arrow">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </span>
+            </div>
+            <div class="accordion__body">
+                <div class="accordion__content">
+                    @(p.Description ?? "Premium quality clothing made with the finest materials. Designed for comfort and style.")
+                </div>
+            </div>
+        </div>
+        <div class="accordion__item">
+            <div class="accordion__header">
+                Shipping & Returns
+                <span class="arrow">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </span>
+            </div>
+            <div class="accordion__body">
+                <div class="accordion__content">
+                    Free shipping on orders over $50. Standard delivery in 5-7 business days. Easy 30-day returns.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reviews Preview -->
+    @if (p.RecentReviews.Any())
+    {
+        <div class="section-header mt-4">
+            <h2 class="section-header__title">Reviews (@p.ReviewCount)</h2>
+            <a href="#" class="section-header__link">View All</a>
+        </div>
+        <div class="px-4">
+            @foreach (var review in p.RecentReviews)
+            {
+                <div class="py-3 border-b">
+                    <div class="flex items-center gap-2 mb-1">
+                        <div class="star-rating" style="font-size:12px">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <span class="star @(i <= review.Rating ? "" : "empty")">★</span>
+                            }
+                        </div>
+                        <span class="text-xs text-secondary">@review.UserName</span>
+                    </div>
+                    @if (!string.IsNullOrEmpty(review.Title))
+                    {
+                        <p class="text-sm font-semibold">@review.Title</p>
+                    }
+                    <p class="text-sm text-secondary mt-1">@review.Body</p>
+                </div>
+            }
+        </div>
+    }
+
+    <div style="height:80px"></div>
+
+    <!-- Sticky Add to Cart -->
+    <div class="sticky-bottom flex gap-3">
+        <button class="btn btn-icon btn-outlined" onclick="Clothify.toggleWishlist(this)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+        </button>
+        <button class="btn btn-primary btn-lg flex-1" onclick="Clothify.toast('Added to cart!','success')">
+            Add to Cart — $@p.Price.ToString("N2")
+        </button>
+    </div>
+}

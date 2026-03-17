@@ -1,0 +1,184 @@
+@page "/"
+@model Clothify.Web.Pages.Home.IndexModel
+@{
+    ViewData["Title"] = "Home";
+    ViewData["ActiveNav"] = "home";
+}
+
+<!-- Search Bar -->
+<a href="/Products/Search" class="search-bar">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input type="text" placeholder="Search for clothes, brands..." readonly />
+</a>
+
+<!-- Category Horizontal Scroll -->
+<div class="category-scroll">
+    <a href="/Products?category=men" class="category-item">
+        <div class="category-item__icon">👔</div>
+        <span class="category-item__label">Men</span>
+    </a>
+    <a href="/Products?category=women" class="category-item">
+        <div class="category-item__icon">👗</div>
+        <span class="category-item__label">Women</span>
+    </a>
+    <a href="/Products?category=kids" class="category-item">
+        <div class="category-item__icon">🧒</div>
+        <span class="category-item__label">Kids</span>
+    </a>
+    <a href="/Products?category=accessories" class="category-item">
+        <div class="category-item__icon">👜</div>
+        <span class="category-item__label">Accessories</span>
+    </a>
+    <a href="/Products?category=shoes" class="category-item">
+        <div class="category-item__icon">👟</div>
+        <span class="category-item__label">Shoes</span>
+    </a>
+    <a href="/Products?category=sale" class="category-item">
+        <div class="category-item__icon">🏷️</div>
+        <span class="category-item__label">Sale</span>
+    </a>
+</div>
+
+<!-- Hero Banner / Carousel -->
+<div class="px-4" data-carousel data-auto-rotate="true">
+    <div class="hero-banner" style="overflow:hidden;position:relative">
+        <div class="carousel-track" style="display:flex;transition:transform 0.4s ease;width:300%">
+            <div style="min-width:100%;position:relative">
+                <div style="width:100%;height:100%;background:linear-gradient(135deg,#111 0%,#333 100%);display:flex;align-items:center;justify-content:center;aspect-ratio:16/9">
+                    <span style="color:white;font-size:1.5rem;font-weight:700;letter-spacing:0.1em">SPRING COLLECTION</span>
+                </div>
+                <div class="hero-banner__overlay">
+                    <div class="hero-banner__title">New Season Arrivals</div>
+                    <div class="hero-banner__subtitle">Up to 40% off selected styles</div>
+                    <a href="/Products?category=sale" class="btn btn-primary">Shop Now</a>
+                </div>
+            </div>
+            <div style="min-width:100%;position:relative">
+                <div style="width:100%;height:100%;background:linear-gradient(135deg,#C9A96E 0%,#8B7355 100%);display:flex;align-items:center;justify-content:center;aspect-ratio:16/9">
+                    <span style="color:white;font-size:1.5rem;font-weight:700;letter-spacing:0.1em">EXCLUSIVE EDIT</span>
+                </div>
+                <div class="hero-banner__overlay">
+                    <div class="hero-banner__title">Curated Essentials</div>
+                    <div class="hero-banner__subtitle">Timeless pieces for every wardrobe</div>
+                    <a href="/Products" class="btn btn-primary">Explore</a>
+                </div>
+            </div>
+            <div style="min-width:100%;position:relative">
+                <div style="width:100%;height:100%;background:linear-gradient(135deg,#2E7D32 0%,#1B5E20 100%);display:flex;align-items:center;justify-content:center;aspect-ratio:16/9">
+                    <span style="color:white;font-size:1.5rem;font-weight:700;letter-spacing:0.1em">FREE SHIPPING</span>
+                </div>
+                <div class="hero-banner__overlay">
+                    <div class="hero-banner__title">Orders Over $50</div>
+                    <div class="hero-banner__subtitle">Fast delivery, free returns</div>
+                    <a href="/Products" class="btn btn-primary">Shop Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="carousel-dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+    </div>
+</div>
+
+<!-- Featured Products -->
+<div class="section-header">
+    <h2 class="section-header__title">Featured</h2>
+    <a href="/Products?featured=true" class="section-header__link">See All</a>
+</div>
+
+<div class="grid-2 px-4">
+    @if (Model.FeaturedProducts.Any())
+    {
+        @foreach (var product in Model.FeaturedProducts)
+        {
+            <a href="/Products/Detail/@product.Id" class="product-card">
+                <div class="product-card__image">
+                    @if (product.IsOnSale)
+                    {
+                        <span class="product-card__badge">-@product.DiscountPercent%</span>
+                    }
+                    <button class="product-card__wishlist" onclick="event.preventDefault();Clothify.toggleWishlist(this,@product.Id)">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                    </button>
+                    <div style="width:100%;height:100%;background:var(--color-surface);display:flex;align-items:center;justify-content:center;color:var(--color-text-light);font-size:2rem">
+                        👕
+                    </div>
+                </div>
+                <div class="product-card__info">
+                    <span class="product-card__brand">@product.Brand</span>
+                    <h3 class="product-card__name">@product.Name</h3>
+                    <div class="product-card__price">
+                        <span class="current">$@product.Price.ToString("N2")</span>
+                        @if (product.OriginalPrice.HasValue)
+                        {
+                            <span class="original">$@product.OriginalPrice.Value.ToString("N2")</span>
+                        }
+                    </div>
+                </div>
+            </a>
+        }
+    }
+    else
+    {
+        @for (int i = 0; i < 4; i++)
+        {
+            <div class="product-card">
+                <div class="product-card__image">
+                    <div style="width:100%;height:100%;background:var(--color-surface);display:flex;align-items:center;justify-content:center;color:var(--color-text-light);font-size:2rem">👕</div>
+                </div>
+                <div class="product-card__info">
+                    <span class="product-card__brand">CLOTHIFY</span>
+                    <h3 class="product-card__name">Sample Product @(i+1)</h3>
+                    <div class="product-card__price"><span class="current">$49.99</span></div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<!-- New Arrivals -->
+<div class="section-header mt-6">
+    <h2 class="section-header__title">Just Arrived</h2>
+    <a href="/Products?sort=newest" class="section-header__link">See All</a>
+</div>
+
+<div class="h-scroll">
+    @if (Model.NewArrivals.Any())
+    {
+        @foreach (var product in Model.NewArrivals)
+        {
+            <a href="/Products/Detail/@product.Id" class="product-card">
+                <div class="product-card__image">
+                    <span class="product-card__badge new">NEW</span>
+                    <div style="width:100%;height:100%;background:var(--color-surface);display:flex;align-items:center;justify-content:center;color:var(--color-text-light);font-size:2rem">👕</div>
+                </div>
+                <div class="product-card__info">
+                    <span class="product-card__brand">@product.Brand</span>
+                    <h3 class="product-card__name">@product.Name</h3>
+                    <div class="product-card__price"><span class="current">$@product.Price.ToString("N2")</span></div>
+                </div>
+            </a>
+        }
+    }
+    else
+    {
+        @for (int i = 0; i < 6; i++)
+        {
+            <div class="product-card">
+                <div class="product-card__image">
+                    <span class="product-card__badge new">NEW</span>
+                    <div style="width:100%;height:100%;background:var(--color-surface);display:flex;align-items:center;justify-content:center;color:var(--color-text-light);font-size:2rem">👗</div>
+                </div>
+                <div class="product-card__info">
+                    <span class="product-card__brand">CLOTHIFY</span>
+                    <h3 class="product-card__name">New Arrival @(i+1)</h3>
+                    <div class="product-card__price"><span class="current">$59.99</span></div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<div style="height:var(--space-8)"></div>

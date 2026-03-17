@@ -1,0 +1,174 @@
+@page
+@model Clothify.Web.Pages.Products.SearchModel
+@{
+    ViewData["Title"] = "Search";
+    ViewData["ShowBack"] = true;
+    ViewData["PageTitle"] = "Search";
+    ViewData["ActiveNav"] = "search";
+}
+
+<!-- Search Input -->
+<div class="search-bar" style="margin-top:var(--space-2)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <form method="get" style="flex:1;display:flex" id="searchForm">
+        <input type="text" name="q" placeholder="Search clothes, brands, styles..." autofocus value="@Model.Query" style="flex:1;border:none;background:transparent;outline:none;font-size:var(--font-size-sm)" />
+        @if (!string.IsNullOrEmpty(Model.Query))
+        {
+            <button type="button" onclick="document.querySelector('input[name=q]').value='';document.getElementById('searchForm').submit()" style="color:var(--color-text-light)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        }
+    </form>
+</div>
+
+@if (string.IsNullOrEmpty(Model.Query))
+{
+    <!-- Trending Searches -->
+    <div class="px-4 mt-4">
+        <h3 class="text-sm font-semibold mb-3">Trending Searches</h3>
+        <div class="flex flex-wrap gap-2">
+            <a href="/Products/Search?q=summer+dresses" class="chip">Summer Dresses</a>
+            <a href="/Products/Search?q=denim+jacket" class="chip">Denim Jacket</a>
+            <a href="/Products/Search?q=sneakers" class="chip">Sneakers</a>
+            <a href="/Products/Search?q=linen+shirt" class="chip">Linen Shirt</a>
+            <a href="/Products/Search?q=maxi+skirt" class="chip">Maxi Skirt</a>
+            <a href="/Products/Search?q=blazer" class="chip">Blazer</a>
+        </div>
+    </div>
+}
+else
+{
+    <!-- Filter Bar -->
+    <div class="flex items-center justify-between px-4 py-2">
+        <span class="text-sm text-secondary">@Model.Results.TotalCount items</span>
+        <div class="flex gap-2">
+            <button class="chip" onclick="Clothify.openBottomSheet('filter-sheet')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/></svg>
+                Filter
+            </button>
+            <button class="chip" onclick="Clothify.openBottomSheet('sort-sheet')">
+                Sort
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Results Grid -->
+    @if (Model.Results.Items.Any())
+    {
+        <div class="grid-2 px-4">
+            @foreach (var product in Model.Results.Items)
+            {
+                <a href="/Products/Detail/@product.Id" class="product-card">
+                    <div class="product-card__image">
+                        @if (product.IsOnSale)
+                        {
+                            <span class="product-card__badge">-@product.DiscountPercent%</span>
+                        }
+                        <button class="product-card__wishlist" onclick="event.preventDefault();Clothify.toggleWishlist(this,@product.Id)">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                        </button>
+                        <div style="width:100%;height:100%;background:var(--color-surface);display:flex;align-items:center;justify-content:center;font-size:2rem">👕</div>
+                    </div>
+                    <div class="product-card__info">
+                        <span class="product-card__brand">@product.Brand</span>
+                        <h3 class="product-card__name">@product.Name</h3>
+                        <div class="product-card__price">
+                            <span class="current">$@product.Price.ToString("N2")</span>
+                            @if (product.OriginalPrice.HasValue)
+                            {
+                                <span class="original">$@product.OriginalPrice.Value.ToString("N2")</span>
+                            }
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <div class="empty-state__icon">🔍</div>
+            <h3 class="empty-state__title">No products found</h3>
+            <p class="empty-state__text">Try adjusting your search or filters</p>
+        </div>
+    }
+}
+
+<!-- Filter Bottom Sheet -->
+<div id="filter-sheet-backdrop" class="modal-backdrop" onclick="Clothify.closeBottomSheet('filter-sheet')"></div>
+<div id="filter-sheet" class="bottom-sheet">
+    <div class="bottom-sheet__handle"></div>
+    <div class="p-4">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold">Filters</h3>
+            <button class="text-sm text-accent font-medium" onclick="Clothify.closeBottomSheet('filter-sheet')">Close</button>
+        </div>
+
+        <!-- Size -->
+        <div class="mb-5">
+            <h4 class="text-sm font-semibold mb-3">Size</h4>
+            <div class="flex flex-wrap gap-2" data-chip-group data-chip-multi="true">
+                <span class="chip">XS</span><span class="chip">S</span><span class="chip">M</span>
+                <span class="chip">L</span><span class="chip">XL</span><span class="chip">XXL</span>
+            </div>
+        </div>
+
+        <!-- Color -->
+        <div class="mb-5">
+            <h4 class="text-sm font-semibold mb-3">Color</h4>
+            <div class="flex flex-wrap gap-3" data-color-group>
+                <span class="color-circle" style="background:#111" title="Black"></span>
+                <span class="color-circle" style="background:#FFF;border:1px solid #ddd" title="White"></span>
+                <span class="color-circle" style="background:#C62828" title="Red"></span>
+                <span class="color-circle" style="background:#1565C0" title="Blue"></span>
+                <span class="color-circle" style="background:#2E7D32" title="Green"></span>
+                <span class="color-circle" style="background:#D4C5A9" title="Beige"></span>
+                <span class="color-circle" style="background:#F48FB1" title="Pink"></span>
+                <span class="color-circle" style="background:#1A237E" title="Navy"></span>
+                <span class="color-circle" style="background:#9E9E9E" title="Grey"></span>
+                <span class="color-circle" style="background:#5D4037" title="Brown"></span>
+            </div>
+        </div>
+
+        <!-- Price Range -->
+        <div class="mb-5">
+            <h4 class="text-sm font-semibold mb-3">Price Range</h4>
+            <div class="flex gap-3 items-center">
+                <input type="number" class="form-input" placeholder="Min" min="0" max="500" style="width:100px" />
+                <span class="text-secondary">—</span>
+                <input type="number" class="form-input" placeholder="Max" min="0" max="500" style="width:100px" />
+            </div>
+        </div>
+
+        <!-- Category -->
+        <div class="mb-5">
+            <h4 class="text-sm font-semibold mb-3">Category</h4>
+            <div class="flex flex-wrap gap-2" data-chip-group>
+                <span class="chip">Tops</span><span class="chip">Bottoms</span><span class="chip">Dresses</span>
+                <span class="chip">Outerwear</span><span class="chip">Shoes</span><span class="chip">Accessories</span>
+            </div>
+        </div>
+
+        <div class="flex gap-3 mt-6">
+            <button class="btn btn-outlined flex-1">Reset</button>
+            <button class="btn btn-primary flex-1" onclick="Clothify.closeBottomSheet('filter-sheet')">Apply Filters</button>
+        </div>
+    </div>
+</div>
+
+<!-- Sort Bottom Sheet -->
+<div id="sort-sheet-backdrop" class="modal-backdrop" onclick="Clothify.closeBottomSheet('sort-sheet')"></div>
+<div id="sort-sheet" class="bottom-sheet">
+    <div class="bottom-sheet__handle"></div>
+    <div class="p-4">
+        <h3 class="text-lg font-bold mb-4">Sort By</h3>
+        <div class="flex flex-col gap-1">
+            <label class="profile-menu__item"><span>Relevance</span><input type="radio" name="sort" checked /></label>
+            <label class="profile-menu__item"><span>Price: Low to High</span><input type="radio" name="sort" /></label>
+            <label class="profile-menu__item"><span>Price: High to Low</span><input type="radio" name="sort" /></label>
+            <label class="profile-menu__item"><span>Newest</span><input type="radio" name="sort" /></label>
+            <label class="profile-menu__item"><span>Most Popular</span><input type="radio" name="sort" /></label>
+        </div>
+    </div>
+</div>

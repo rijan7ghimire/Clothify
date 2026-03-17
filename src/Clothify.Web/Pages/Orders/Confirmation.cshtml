@@ -1,0 +1,48 @@
+@page "/Orders/Confirmation/{id:int}"
+@model Clothify.Web.Pages.Orders.ConfirmationModel
+@{
+    ViewData["Title"] = "Order Confirmed";
+    ViewData["HideNav"] = true;
+}
+
+<div class="container" style="max-width:480px;padding-top:60px">
+    <!-- Success Animation -->
+    <div class="text-center mb-6">
+        <div style="width:80px;height:80px;border-radius:50%;background:#E8F5E9;display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:40px" class="animate-slide-up">
+            ✓
+        </div>
+        <h1 class="text-xl font-bold mt-4 animate-fade-in">Order Placed Successfully!</h1>
+        <p class="text-sm text-secondary mt-2">Order #@(Model.Order?.OrderNumber ?? "CLT-20260317-0001")</p>
+    </div>
+
+    <!-- Order Summary Card -->
+    <div class="card border p-4 mb-4">
+        <div class="flex justify-between mb-2">
+            <span class="text-sm text-secondary">Order Date</span>
+            <span class="text-sm font-medium">@(Model.Order?.PlacedAt.ToString("MMM dd, yyyy") ?? "Mar 17, 2026")</span>
+        </div>
+        <div class="flex justify-between mb-2">
+            <span class="text-sm text-secondary">Estimated Delivery</span>
+            <span class="text-sm font-medium">@(Model.Order?.EstimatedDeliveryDate?.ToString("MMM dd, yyyy") ?? "Mar 24, 2026")</span>
+        </div>
+        <div class="flex justify-between mb-2">
+            <span class="text-sm text-secondary">Items</span>
+            <span class="text-sm font-medium">@(Model.Order?.ItemCount ?? 3)</span>
+        </div>
+        <div class="flex justify-between border-t pt-2 mt-2">
+            <span class="font-semibold">Total Paid</span>
+            <span class="font-bold">$@(Model.Order?.Total.ToString("N2") ?? "139.97")</span>
+        </div>
+    </div>
+
+    <!-- Email note -->
+    <p class="text-sm text-center text-secondary mb-6">
+        📧 A confirmation email has been sent to your inbox
+    </p>
+
+    <!-- Action Buttons -->
+    <div class="flex flex-col gap-3">
+        <a href="/Orders/Track/@(Model.Order?.Id ?? 1)" class="btn btn-primary btn-block btn-lg">Track Order</a>
+        <a href="/" class="btn btn-outlined btn-block">Continue Shopping</a>
+    </div>
+</div>

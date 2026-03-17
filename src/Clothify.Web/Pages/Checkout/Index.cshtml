@@ -1,0 +1,152 @@
+@page "/Checkout"
+@model Clothify.Web.Pages.Checkout.CheckoutModel
+@{
+    ViewData["Title"] = "Checkout";
+    ViewData["ShowBack"] = true;
+    ViewData["PageTitle"] = "Checkout";
+    ViewData["HideNav"] = true;
+}
+
+<!-- Progress Stepper -->
+<div class="checkout-stepper">
+    <div class="checkout-stepper__step active">
+        <span class="checkout-stepper__number">1</span>
+        <span>Shipping</span>
+    </div>
+    <div class="checkout-stepper__line"></div>
+    <div class="checkout-stepper__step">
+        <span class="checkout-stepper__number">2</span>
+        <span>Payment</span>
+    </div>
+    <div class="checkout-stepper__line"></div>
+    <div class="checkout-stepper__step">
+        <span class="checkout-stepper__number">3</span>
+        <span>Review</span>
+    </div>
+</div>
+
+<form method="post" class="px-4">
+    @Html.AntiForgeryToken()
+
+    <!-- Shipping Address -->
+    <h3 class="text-lg font-bold mb-4">Shipping Address</h3>
+
+    <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" name="FullName" class="form-input" placeholder="John Doe" required />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Street Address</label>
+        <input type="text" name="StreetLine1" class="form-input" placeholder="123 Main Street" required />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Apt / Suite (Optional)</label>
+        <input type="text" name="StreetLine2" class="form-input" placeholder="Apt 4B" />
+    </div>
+
+    <div class="flex gap-3">
+        <div class="form-group flex-1">
+            <label class="form-label">City</label>
+            <input type="text" name="City" class="form-input" placeholder="New York" required />
+        </div>
+        <div class="form-group flex-1">
+            <label class="form-label">State</label>
+            <input type="text" name="State" class="form-input" placeholder="NY" required />
+        </div>
+    </div>
+
+    <div class="flex gap-3">
+        <div class="form-group flex-1">
+            <label class="form-label">ZIP Code</label>
+            <input type="text" name="ZipCode" class="form-input" placeholder="10001" required />
+        </div>
+        <div class="form-group flex-1">
+            <label class="form-label">Phone</label>
+            <input type="tel" name="Phone" class="form-input" placeholder="+1 234-567-8900" required />
+        </div>
+    </div>
+
+    <label class="checkbox mb-6">
+        <input type="checkbox" name="SaveAddress" />
+        <span>Save this address for future orders</span>
+    </label>
+
+    <!-- Shipping Method -->
+    <h3 class="text-lg font-bold mb-4">Shipping Method</h3>
+
+    <div class="flex flex-col gap-2 mb-6">
+        <label class="card p-4 flex items-center gap-3 border" style="cursor:pointer">
+            <input type="radio" name="ShippingMethod" value="Standard" checked />
+            <div class="flex-1">
+                <div class="flex justify-between">
+                    <span class="font-medium text-sm">Standard (5-7 days)</span>
+                    <span class="font-semibold text-sm">Free</span>
+                </div>
+                <span class="text-xs text-secondary">Estimated: March 24, 2026</span>
+            </div>
+        </label>
+        <label class="card p-4 flex items-center gap-3 border" style="cursor:pointer">
+            <input type="radio" name="ShippingMethod" value="Express" />
+            <div class="flex-1">
+                <div class="flex justify-between">
+                    <span class="font-medium text-sm">Express (2-3 days)</span>
+                    <span class="font-semibold text-sm">$9.99</span>
+                </div>
+                <span class="text-xs text-secondary">Estimated: March 20, 2026</span>
+            </div>
+        </label>
+        <label class="card p-4 flex items-center gap-3 border" style="cursor:pointer">
+            <input type="radio" name="ShippingMethod" value="NextDay" />
+            <div class="flex-1">
+                <div class="flex justify-between">
+                    <span class="font-medium text-sm">Next Day</span>
+                    <span class="font-semibold text-sm">$19.99</span>
+                </div>
+                <span class="text-xs text-secondary">Estimated: March 18, 2026</span>
+            </div>
+        </label>
+    </div>
+
+    <!-- Payment -->
+    <h3 class="text-lg font-bold mb-4">Payment Method</h3>
+
+    <div class="form-group">
+        <label class="form-label">Card Number</label>
+        <input type="text" class="form-input" placeholder="4242 4242 4242 4242" maxlength="19" />
+    </div>
+
+    <div class="flex gap-3">
+        <div class="form-group flex-1">
+            <label class="form-label">Expiry</label>
+            <input type="text" class="form-input" placeholder="MM/YY" maxlength="5" />
+        </div>
+        <div class="form-group flex-1">
+            <label class="form-label">CVV</label>
+            <input type="text" class="form-input" placeholder="123" maxlength="4" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Cardholder Name</label>
+        <input type="text" class="form-input" placeholder="JOHN DOE" />
+    </div>
+
+    <!-- Trust Badges -->
+    <div class="flex items-center gap-4 py-4 text-xs text-secondary">
+        <span>🔒 Secure Checkout</span>
+        <span>↩️ 30-Day Returns</span>
+        <span>🚚 Free Shipping $50+</span>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="order-summary border rounded-lg mb-4" style="border-radius:var(--radius-lg)">
+        <div class="order-summary__row total" style="border-top:none;margin-top:0">
+            <span>Order Total</span>
+            <span>$139.97</span>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block btn-lg mb-6">Place Order — $139.97</button>
+</form>

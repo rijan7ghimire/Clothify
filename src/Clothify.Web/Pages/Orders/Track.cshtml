@@ -1,0 +1,99 @@
+@page "/Orders/Track/{id:int}"
+@model Clothify.Web.Pages.Orders.TrackModel
+@{
+    ViewData["Title"] = "Track Order";
+    ViewData["ShowBack"] = true;
+    ViewData["PageTitle"] = "Order Tracking";
+}
+
+<div class="px-4 py-4">
+    <div class="card border p-4 mb-4">
+        <div class="flex justify-between mb-1">
+            <span class="text-sm font-bold">@(Model.Tracking?.OrderNumber ?? "#CLT-20260317-0001")</span>
+            <span class="badge badge-info">@(Model.Tracking?.Status.ToString() ?? "Processing")</span>
+        </div>
+        <p class="text-xs text-secondary">Estimated delivery: @(Model.Tracking?.EstimatedDeliveryDate?.ToString("MMM dd, yyyy") ?? "Mar 24, 2026")</p>
+    </div>
+
+    <!-- Tracking Timeline -->
+    <div class="timeline">
+        @if (Model.Tracking?.Steps.Any() == true)
+        {
+            @foreach (var step in Model.Tracking.Steps)
+            {
+                <div class="timeline__step @(step.IsCompleted ? "completed" : "") @(step.IsCurrent ? "current" : "")">
+                    <div class="timeline__dot">
+                        @if (step.IsCompleted)
+                        {
+                            <span>✓</span>
+                        }
+                        else if (step.IsCurrent)
+                        {
+                            <span>●</span>
+                        }
+                    </div>
+                    <div class="timeline__content">
+                        <h4>@step.Title</h4>
+                        <p>@(step.CompletedAt?.ToString("MMM dd, yyyy h:mm tt") ?? "")</p>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <!-- Sample timeline -->
+            <div class="timeline__step completed">
+                <div class="timeline__dot">✓</div>
+                <div class="timeline__content"><h4>Order Placed</h4><p>Mar 17, 2026 2:30 PM</p></div>
+            </div>
+            <div class="timeline__step completed">
+                <div class="timeline__dot">✓</div>
+                <div class="timeline__content"><h4>Payment Confirmed</h4><p>Mar 17, 2026 2:31 PM</p></div>
+            </div>
+            <div class="timeline__step current">
+                <div class="timeline__dot">●</div>
+                <div class="timeline__content"><h4>Processing</h4><p>Your order is being prepared</p></div>
+            </div>
+            <div class="timeline__step">
+                <div class="timeline__dot"></div>
+                <div class="timeline__content"><h4>Shipped</h4><p></p></div>
+            </div>
+            <div class="timeline__step">
+                <div class="timeline__dot"></div>
+                <div class="timeline__content"><h4>Out for Delivery</h4><p></p></div>
+            </div>
+            <div class="timeline__step">
+                <div class="timeline__dot"></div>
+                <div class="timeline__content"><h4>Delivered</h4><p></p></div>
+            </div>
+        }
+    </div>
+
+    <!-- Delivery Info -->
+    <div class="card border p-4 mt-4">
+        <h3 class="text-sm font-semibold mb-3">Delivery Information</h3>
+        @if (Model.Tracking?.TrackingNumber != null)
+        {
+            <div class="flex justify-between mb-2">
+                <span class="text-sm text-secondary">Carrier</span>
+                <span class="text-sm font-medium">@Model.Tracking.CarrierName</span>
+            </div>
+            <div class="flex justify-between mb-2">
+                <span class="text-sm text-secondary">Tracking #</span>
+                <button class="text-sm font-medium text-accent" onclick="navigator.clipboard.writeText('@Model.Tracking.TrackingNumber');Clothify.toast('Copied!')">
+                    @Model.Tracking.TrackingNumber 📋
+                </button>
+            </div>
+        }
+        <div class="flex justify-between">
+            <span class="text-sm text-secondary">Ship to</span>
+            <span class="text-sm font-medium">@(Model.Tracking?.ShippingAddress ?? "123 Main St, New York, NY")</span>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex flex-col gap-3 mt-6">
+        <a href="/Orders" class="btn btn-outlined btn-block">View All Orders</a>
+        <button class="btn btn-text btn-block text-error">Need Help?</button>
+    </div>
+</div>

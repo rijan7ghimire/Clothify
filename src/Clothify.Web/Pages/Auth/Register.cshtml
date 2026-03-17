@@ -1,0 +1,106 @@
+@page
+@model Clothify.Web.Pages.Auth.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+    ViewData["HideNav"] = true;
+    ViewData["HideLayout"] = true;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Register - Clothify</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/clothify.css" />
+</head>
+<body style="padding-bottom:0">
+    <div class="container" style="max-width:440px;padding-top:40px;padding-bottom:40px">
+        <!-- Header -->
+        <div class="flex items-center mb-6">
+            <a href="/Auth/Login" class="btn-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            </a>
+        </div>
+
+        <h2 class="text-2xl font-bold">Create Account</h2>
+        <p class="text-secondary mt-1 mb-6">Join Clothify for the best fashion deals</p>
+
+        <form method="post">
+            @Html.AntiForgeryToken()
+
+            @if (Model.Errors.Any())
+            {
+                <div style="background:#FFEBEE;color:var(--color-error);padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);margin-bottom:var(--space-4);font-size:var(--font-size-sm)">
+                    @foreach (var error in Model.Errors)
+                    {
+                        <p>@error</p>
+                    }
+                </div>
+            }
+
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="FullName" class="form-input" placeholder="John Doe" value="@Model.FullName" required minlength="2" />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" name="Email" class="form-input" placeholder="you@example.com" value="@Model.Email" required />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input type="tel" name="PhoneNumber" class="form-input" placeholder="+1 123-456-7890" value="@Model.PhoneNumber" required />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <div class="form-input-icon">
+                    <input type="password" name="Password" id="reg-password" class="form-input" placeholder="Min. 8 characters" required minlength="8" />
+                    <span class="icon" data-toggle-password>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </span>
+                </div>
+                <div id="password-strength" class="mt-1" style="height:4px;border-radius:2px;background:var(--color-border);overflow:hidden">
+                    <div id="strength-bar" style="height:100%;width:0;transition:width 0.3s,background 0.3s;border-radius:2px"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" name="ConfirmPassword" class="form-input" placeholder="Re-enter your password" required />
+            </div>
+
+            <label class="checkbox mb-4">
+                <input type="checkbox" name="AgreeTerms" required />
+                <span class="text-sm">I agree to the <a href="#" class="text-accent font-medium">Terms of Service</a> and <a href="#" class="text-accent font-medium">Privacy Policy</a></span>
+            </label>
+
+            <button type="submit" class="btn btn-primary btn-block btn-lg">Create Account</button>
+        </form>
+
+        <p class="text-center mt-6 text-sm">
+            Already have an account?
+            <a href="/Auth/Login" class="font-semibold text-accent">Sign In</a>
+        </p>
+    </div>
+
+    <script src="~/js/clothify.js"></script>
+    <script>
+        document.getElementById('reg-password')?.addEventListener('input', function() {
+            const bar = document.getElementById('strength-bar');
+            const val = this.value;
+            let strength = 0;
+            if (val.length >= 8) strength++;
+            if (/[A-Z]/.test(val)) strength++;
+            if (/[0-9]/.test(val)) strength++;
+            if (/[^A-Za-z0-9]/.test(val)) strength++;
+            const colors = ['#C62828', '#F57F17', '#F9A825', '#2E7D32'];
+            bar.style.width = (strength * 25) + '%';
+            bar.style.background = colors[strength - 1] || '#E0E0E0';
+        });
+    </script>
+</body>
+</html>

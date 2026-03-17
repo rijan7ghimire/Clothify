@@ -1,0 +1,31 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+
+## IDE
+.vs/
+.vscode/
+*.swp
+
+## Database
+*.db
+*.db-shm
+*.db-wal
+
+## Secrets
+appsettings.Development.json
+secrets.json
+
+## OS
+Thumbs.db
+.DS_Store
+
+## NuGet
+packages/
+*.nupkg

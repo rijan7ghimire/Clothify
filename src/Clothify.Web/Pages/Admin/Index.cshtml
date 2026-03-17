@@ -1,0 +1,181 @@
+@page "/Admin"
+@model Clothify.Web.Pages.Admin.AdminDashboardModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    ViewData["HideNav"] = true;
+    Layout = "_Layout";
+}
+
+<!-- Admin Top Bar -->
+<div class="flex items-center justify-between px-4 py-3 border-b bg-white" style="position:sticky;top:56px;z-index:100">
+    <h1 class="text-lg font-bold">Dashboard</h1>
+    <div class="flex items-center gap-3">
+        <select class="form-input" style="width:auto;min-height:36px;padding:var(--space-2) var(--space-3);font-size:var(--font-size-xs)">
+            <option>Last 30 Days</option>
+            <option>This Week</option>
+            <option>Today</option>
+            <option>This Year</option>
+        </select>
+    </div>
+</div>
+
+<div class="admin-layout">
+    <!-- Sidebar (visible on tablet+) -->
+    <aside class="admin-sidebar">
+        <nav>
+            <a href="/Admin" class="admin-sidebar__item active">
+                <span>📊</span> Dashboard
+            </a>
+            <a href="#" class="admin-sidebar__item">
+                <span>📦</span> Products
+            </a>
+            <a href="#" class="admin-sidebar__item">
+                <span>🛒</span> Orders
+            </a>
+            <a href="#" class="admin-sidebar__item">
+                <span>👥</span> Customers
+            </a>
+            <a href="#" class="admin-sidebar__item">
+                <span>📈</span> Analytics
+            </a>
+            <a href="#" class="admin-sidebar__item">
+                <span>🏷️</span> Coupons
+            </a>
+            <a href="#" class="admin-sidebar__item">
+                <span>⭐</span> Reviews
+            </a>
+            <a href="#" class="admin-sidebar__item">
+                <span>⚙️</span> Settings
+            </a>
+        </nav>
+    </aside>
+
+    <div class="admin-content">
+        <!-- KPI Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-card__label">Revenue</div>
+                <div class="stat-card__value">$@(Model.Dashboard?.Revenue.Value ?? "$45,231")</div>
+                <div class="stat-card__change positive">+12.5%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card__label">Orders</div>
+                <div class="stat-card__value">@(Model.Dashboard?.TotalOrders.Value ?? "312")</div>
+                <div class="stat-card__change positive">+8.2%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card__label">Customers</div>
+                <div class="stat-card__value">89</div>
+                <div class="stat-card__change positive">+15.3%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card__label">Conversion</div>
+                <div class="stat-card__value">3.2%</div>
+                <div class="stat-card__change negative">-0.4%</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="px-4 py-3 flex gap-2 overflow-x-auto">
+            <button class="btn btn-primary" style="white-space:nowrap;font-size:var(--font-size-sm)">+ Add Product</button>
+            <button class="btn btn-outlined" style="white-space:nowrap;font-size:var(--font-size-sm)">Create Coupon</button>
+            <button class="btn btn-outlined" style="white-space:nowrap;font-size:var(--font-size-sm)">Export Orders</button>
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="section-header">
+            <h2 class="section-header__title">Recent Orders</h2>
+            <a href="#" class="section-header__link">View All</a>
+        </div>
+
+        <div class="px-4" style="overflow-x:auto">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Order</th>
+                        <th>Customer</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Dashboard?.RecentOrders.Any() == true)
+                    {
+                        @foreach (var order in Model.Dashboard.RecentOrders)
+                        {
+                            <tr>
+                                <td class="font-medium">@order.OrderNumber</td>
+                                <td>@order.CustomerName</td>
+                                <td class="font-semibold">$@order.Total.ToString("N2")</td>
+                                <td>
+                                    <span class="badge @(order.Status switch { "Delivered" => "badge-success", "Shipped" => "badge-info", "Processing" => "badge-warning", "Cancelled" => "badge-error", _ => "badge-neutral" })">
+                                        @order.Status
+                                    </span>
+                                </td>
+                                <td class="text-secondary">@order.Date.ToString("MMM dd")</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        @for (int i = 0; i < 5; i++)
+                        {
+                            var statuses = new[] { ("Delivered", "badge-success"), ("Shipped", "badge-info"), ("Processing", "badge-warning"), ("Delivered", "badge-success"), ("Cancelled", "badge-error") };
+                            <tr>
+                                <td class="font-medium">#CLT-2026031@(i+1)</td>
+                                <td>Customer @(i+1)</td>
+                                <td class="font-semibold">$@((49.99m * (i+1)).ToString("N2"))</td>
+                                <td><span class="badge @statuses[i].Item2">@statuses[i].Item1</span></td>
+                                <td class="text-secondary">Mar @(17-i)</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Low Stock Alerts -->
+        <div class="section-header mt-4">
+            <h2 class="section-header__title">Low Stock Alerts</h2>
+        </div>
+
+        <div class="px-4 pb-8">
+            @if (Model.Dashboard?.LowStockAlerts.Any() == true)
+            {
+                @foreach (var alert in Model.Dashboard.LowStockAlerts)
+                {
+                    <div class="flex items-center justify-between py-3 border-b">
+                        <div>
+                            <p class="text-sm font-medium">@alert.ProductName</p>
+                            <p class="text-xs text-secondary">@alert.VariantInfo — @alert.CurrentStock left</p>
+                        </div>
+                        <button class="btn btn-outlined" style="font-size:var(--font-size-xs);min-height:32px;padding:var(--space-1) var(--space-3)">Restock</button>
+                    </div>
+                }
+            }
+            else
+            {
+                @for (int i = 0; i < 3; i++)
+                {
+                    <div class="flex items-center justify-between py-3 border-b">
+                        <div>
+                            <p class="text-sm font-medium">Sample Product @(i+1)</p>
+                            <p class="text-xs text-secondary">M / Black — @(3-i) left</p>
+                        </div>
+                        <button class="btn btn-outlined" style="font-size:var(--font-size-xs);min-height:32px;padding:var(--space-1) var(--space-3)">Restock</button>
+                    </div>
+                }
+            }
+        </div>
+
+        <!-- Mobile Admin Nav -->
+        <nav class="hide-tablet-up" style="position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--color-border);display:flex;justify-content:space-around;padding:var(--space-2) 0;z-index:300">
+            <a href="/Admin" class="bottom-nav__item active"><span>📊</span><span style="font-size:10px">Dashboard</span></a>
+            <a href="#" class="bottom-nav__item"><span>📦</span><span style="font-size:10px">Products</span></a>
+            <a href="#" class="bottom-nav__item"><span>🛒</span><span style="font-size:10px">Orders</span></a>
+            <a href="#" class="bottom-nav__item"><span>👥</span><span style="font-size:10px">Customers</span></a>
+            <a href="#" class="bottom-nav__item"><span>⚙️</span><span style="font-size:10px">More</span></a>
+        </nav>
+    </div>
+</div>

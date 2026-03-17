@@ -1,0 +1,67 @@
+@page "/Products"
+@model Clothify.Web.Pages.Products.ProductListModel
+@{
+    ViewData["Title"] = Model.CategoryName ?? "Products";
+    ViewData["ShowBack"] = true;
+    ViewData["PageTitle"] = Model.CategoryName ?? "All Products";
+    ViewData["ActiveNav"] = "search";
+}
+
+<!-- Filter/Sort Bar -->
+<div class="flex items-center justify-between px-4 py-3">
+    <span class="text-sm text-secondary">@Model.Products.TotalCount items</span>
+    <div class="flex gap-2">
+        <button class="chip" onclick="Clothify.openBottomSheet('filter-sheet')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/></svg>
+            Filter
+        </button>
+        <button class="chip">
+            Sort
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+    </div>
+</div>
+
+<!-- Product Grid -->
+@if (Model.Products.Items.Any())
+{
+    <div class="grid-2 px-4">
+        @foreach (var product in Model.Products.Items)
+        {
+            <a href="/Products/Detail/@product.Id" class="product-card">
+                <div class="product-card__image">
+                    @if (product.IsOnSale)
+                    {
+                        <span class="product-card__badge">-@product.DiscountPercent%</span>
+                    }
+                    <button class="product-card__wishlist" onclick="event.preventDefault();Clothify.toggleWishlist(this,@product.Id)">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                    </button>
+                    <div style="width:100%;height:100%;background:var(--color-surface);display:flex;align-items:center;justify-content:center;font-size:2rem">👕</div>
+                </div>
+                <div class="product-card__info">
+                    <span class="product-card__brand">@product.Brand</span>
+                    <h3 class="product-card__name">@product.Name</h3>
+                    <div class="product-card__price">
+                        <span class="current">$@product.Price.ToString("N2")</span>
+                        @if (product.OriginalPrice.HasValue)
+                        {
+                            <span class="original">$@product.OriginalPrice.Value.ToString("N2")</span>
+                        }
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+}
+else
+{
+    <div class="empty-state">
+        <div class="empty-state__icon">👗</div>
+        <h3 class="empty-state__title">No products found</h3>
+        <p class="empty-state__text">Try adjusting your filters</p>
+        <a href="/Products" class="btn btn-outlined">Clear Filters</a>
+    </div>
+}
+
+<div style="height:var(--space-8)"></div>

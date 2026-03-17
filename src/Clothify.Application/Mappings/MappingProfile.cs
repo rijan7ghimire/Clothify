@@ -43,7 +43,7 @@ public class MappingProfile : Profile
         CreateMap<ProductImage, ProductImageResponse>();
         CreateMap<ProductVariant, ProductVariantResponse>();
         CreateMap<Review, ReviewResponse>()
-            .ForMember(d => d.UserName, o => o.MapFrom(s => $"{s.User.FirstName} {s.User.LastName}"));
+            .ForMember(d => d.UserName, o => o.MapFrom(s => s.User != null ? $"{s.User.FirstName} {s.User.LastName}" : "Anonymous"));
 
         // Cart
         CreateMap<CartItem, CartItemResponse>()

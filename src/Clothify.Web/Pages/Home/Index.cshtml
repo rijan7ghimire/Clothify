@@ -14,72 +14,77 @@
 <!-- Category Horizontal Scroll -->
 <div class="category-scroll">
     <a href="/Products?category=boys" class="category-item">
-        <div class="category-item__icon">👦</div>
+        <div class="category-item__icon" style="overflow:hidden;padding:0">
+            <img src="/images/products/4729.jpg" alt="Boys" style="width:100%;height:100%;object-fit:cover" />
+        </div>
         <span class="category-item__label">Boys</span>
     </a>
     <a href="/Products?category=girls" class="category-item">
-        <div class="category-item__icon">👧</div>
+        <div class="category-item__icon" style="overflow:hidden;padding:0">
+            <img src="/images/products/42419.jpg" alt="Girls" style="width:100%;height:100%;object-fit:cover" />
+        </div>
         <span class="category-item__label">Girls</span>
     </a>
     <a href="/Products?category=men" class="category-item">
-        <div class="category-item__icon">👟</div>
+        <div class="category-item__icon" style="overflow:hidden;padding:0">
+            <img src="/images/products/9204.jpg" alt="Men Shoes" style="width:100%;height:100%;object-fit:cover" />
+        </div>
         <span class="category-item__label">Men Shoes</span>
     </a>
     <a href="/Products?category=women" class="category-item">
-        <div class="category-item__icon">👠</div>
+        <div class="category-item__icon" style="overflow:hidden;padding:0">
+            <img src="/images/products/54118.jpg" alt="Women Shoes" style="width:100%;height:100%;object-fit:cover" />
+        </div>
         <span class="category-item__label">Women Shoes</span>
     </a>
     <a href="/Products?category=tops" class="category-item">
-        <div class="category-item__icon">👕</div>
-        <span class="category-item__label">Tops</span>
+        <div class="category-item__icon" style="overflow:hidden;padding:0">
+            <img src="/images/products/31127.jpg" alt="Dresses" style="width:100%;height:100%;object-fit:cover" />
+        </div>
+        <span class="category-item__label">Dresses</span>
     </a>
     <a href="/Products?category=dresses" class="category-item">
-        <div class="category-item__icon">👗</div>
-        <span class="category-item__label">Dresses</span>
+        <div class="category-item__icon" style="overflow:hidden;padding:0">
+            <img src="/images/products/59051.jpg" alt="Sandals" style="width:100%;height:100%;object-fit:cover" />
+        </div>
+        <span class="category-item__label">Sandals</span>
     </a>
 </div>
 
-<!-- Hero Banner / Carousel -->
-<div class="px-4" data-carousel data-auto-rotate="true">
-    <div class="hero-banner" style="overflow:hidden;position:relative">
-        <div class="carousel-track" style="display:flex;transition:transform 0.4s ease;width:300%">
-            <div style="min-width:100%;position:relative">
-                <div style="width:100%;height:100%;background:linear-gradient(135deg,#111 0%,#333 100%);display:flex;align-items:center;justify-content:center;aspect-ratio:16/9">
-                    <span style="color:white;font-size:1.5rem;font-weight:700;letter-spacing:0.1em">SPRING COLLECTION</span>
-                </div>
-                <div class="hero-banner__overlay">
-                    <div class="hero-banner__title">New Season Arrivals</div>
-                    <div class="hero-banner__subtitle">Up to 40% off selected styles</div>
-                    <a href="/Products?category=sale" class="btn btn-primary">Shop Now</a>
-                </div>
-            </div>
-            <div style="min-width:100%;position:relative">
-                <div style="width:100%;height:100%;background:linear-gradient(135deg,#C9A96E 0%,#8B7355 100%);display:flex;align-items:center;justify-content:center;aspect-ratio:16/9">
-                    <span style="color:white;font-size:1.5rem;font-weight:700;letter-spacing:0.1em">EXCLUSIVE EDIT</span>
-                </div>
-                <div class="hero-banner__overlay">
-                    <div class="hero-banner__title">Curated Essentials</div>
-                    <div class="hero-banner__subtitle">Timeless pieces for every wardrobe</div>
-                    <a href="/Products" class="btn btn-primary">Explore</a>
-                </div>
-            </div>
-            <div style="min-width:100%;position:relative">
-                <div style="width:100%;height:100%;background:linear-gradient(135deg,#2E7D32 0%,#1B5E20 100%);display:flex;align-items:center;justify-content:center;aspect-ratio:16/9">
-                    <span style="color:white;font-size:1.5rem;font-weight:700;letter-spacing:0.1em">FREE SHIPPING</span>
-                </div>
-                <div class="hero-banner__overlay">
-                    <div class="hero-banner__title">Orders Over $50</div>
-                    <div class="hero-banner__subtitle">Fast delivery, free returns</div>
-                    <a href="/Products" class="btn btn-primary">Shop Now</a>
-                </div>
-            </div>
+<!-- Hero Banners -->
+<div class="px-4" style="margin-top:var(--space-3)">
+    <!-- Banner 1 -->
+    <a href="/Products?category=boys" style="display:block;position:relative;width:100%;aspect-ratio:16/9;border-radius:var(--radius-lg);overflow:hidden;margin-bottom:var(--space-3)">
+        <img src="/images/products/4729.jpg" alt="Boys Collection" style="width:100%;height:100%;object-fit:cover;display:block" />
+        <div style="position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,0.7))"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:var(--space-5);color:white">
+            <div style="font-size:var(--font-size-xl);font-weight:700">Boys Collection</div>
+            <div style="font-size:var(--font-size-sm);opacity:0.9;margin:var(--space-1) 0 var(--space-3)">Up to 40% off selected styles</div>
+            <span class="btn btn-primary" style="display:inline-block">Shop Now</span>
         </div>
-    </div>
-    <div class="carousel-dots">
-        <span class="dot active"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-    </div>
+    </a>
+
+    <!-- Banner 2 -->
+    <a href="/Products?category=women" style="display:block;position:relative;width:100%;aspect-ratio:16/9;border-radius:var(--radius-lg);overflow:hidden;margin-bottom:var(--space-3)">
+        <img src="/images/products/54118.jpg" alt="Women Footwear" style="width:100%;height:100%;object-fit:cover;display:block" />
+        <div style="position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,0.7))"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:var(--space-5);color:white">
+            <div style="font-size:var(--font-size-xl);font-weight:700">Women Footwear</div>
+            <div style="font-size:var(--font-size-sm);opacity:0.9;margin:var(--space-1) 0 var(--space-3)">Heels, flats, sandals &amp; more</div>
+            <span class="btn btn-primary" style="display:inline-block">Explore</span>
+        </div>
+    </a>
+
+    <!-- Banner 3 -->
+    <a href="/Products?category=men" style="display:block;position:relative;width:100%;aspect-ratio:16/9;border-radius:var(--radius-lg);overflow:hidden">
+        <img src="/images/products/9204.jpg" alt="Men Shoes" style="width:100%;height:100%;object-fit:cover;display:block" />
+        <div style="position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,0.7))"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:var(--space-5);color:white">
+            <div style="font-size:var(--font-size-xl);font-weight:700">Men's Shoes</div>
+            <div style="font-size:var(--font-size-sm);opacity:0.9;margin:var(--space-1) 0 var(--space-3)">Free shipping on orders over $50</div>
+            <span class="btn btn-primary" style="display:inline-block">Shop Now</span>
+        </div>
+    </a>
 </div>
 
 <!-- Featured Products -->

@@ -5,6 +5,9 @@
     ViewData["ShowBack"] = true;
     ViewData["PageTitle"] = Model.CategoryName ?? "All Products";
     ViewData["ActiveNav"] = "search";
+    var currentCategory = HttpContext.Request.Query["category"].FirstOrDefault();
+    var currentSort = HttpContext.Request.Query["sort"].FirstOrDefault();
+    var currentQ = HttpContext.Request.Query["q"].FirstOrDefault();
 }
 
 <!-- Filter/Sort Bar -->
@@ -15,7 +18,7 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/></svg>
             Filter
         </button>
-        <button class="chip">
+        <button class="chip" onclick="Clothify.openBottomSheet('sort-sheet')">
             Sort
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
         </button>
@@ -53,15 +56,96 @@
             </a>
         }
     </div>
+
+    <!-- Pagination -->
+    @if (Model.Products.TotalPages > 1)
+    {
+        <div class="flex justify-center gap-2 py-4">
+            @for (int pg = 1; pg <= Math.Min(Model.Products.TotalPages, 10); pg++)
+            {
+                var isActive = pg == Model.Products.Page;
+                <a href="/Products?category=@currentCategory&sort=@currentSort&q=@currentQ&page=@pg"
+                   class="btn @(isActive ? "btn-primary" : "btn-outlined")"
+                   style="min-width:40px;min-height:40px;padding:8px;font-size:14px">@pg</a>
+            }
+        </div>
+    }
 }
 else
 {
     <div class="empty-state">
-        <div class="empty-state__icon">👗</div>
+        <div class="empty-state__icon">&#128090;</div>
         <h3 class="empty-state__title">No products found</h3>
         <p class="empty-state__text">Try adjusting your filters</p>
         <a href="/Products" class="btn btn-outlined">Clear Filters</a>
     </div>
 }
+
+<!-- Sort Bottom Sheet -->
+<div id="sort-sheet-backdrop" class="modal-backdrop" onclick="Clothify.closeBottomSheet('sort-sheet')"></div>
+<div id="sort-sheet" class="bottom-sheet">
+    <div class="bottom-sheet__handle"></div>
+    <div class="p-4">
+        <h3 class="text-lg font-bold mb-4">Sort By</h3>
+        <div class="flex flex-col">
+            <a href="/Products?category=@currentCategory&q=@currentQ" class="profile-menu__item @(currentSort == null ? "font-bold" : "")">Relevance</a>
+            <a href="/Products?category=@currentCategory&q=@currentQ&sort=price_asc" class="profile-menu__item @(currentSort == "price_asc" ? "font-bold" : "")">Price: Low to High</a>
+            <a href="/Products?category=@currentCategory&q=@currentQ&sort=price_desc" class="profile-menu__item @(currentSort == "price_desc" ? "font-bold" : "")">Price: High to Low</a>
+            <a href="/Products?category=@currentCategory&q=@currentQ&sort=newest" class="profile-menu__item @(currentSort == "newest" ? "font-bold" : "")">Newest First</a>
+            <a href="/Products?category=@currentCategory&q=@currentQ&sort=popular" class="profile-menu__item @(currentSort == "popular" ? "font-bold" : "")">Most Popular</a>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Bottom Sheet -->
+<div id="filter-sheet-backdrop" class="modal-backdrop" onclick="Clothify.closeBottomSheet('filter-sheet')"></div>
+<div id="filter-sheet" class="bottom-sheet">
+    <div class="bottom-sheet__handle"></div>
+    <form method="get" action="/Products" class="p-4">
+        <input type="hidden" name="category" value="@currentCategory" />
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold">Filters</h3>
+            <button type="button" class="text-sm text-accent font-medium" onclick="Clothify.closeBottomSheet('filter-sheet')">Close</button>
+        </div>
+
+        <!-- Category Quick Links -->
+        <div class="mb-5">
+            <h4 class="text-sm font-semibold mb-3">Category</h4>
+            <div class="flex flex-wrap gap-2">
+                <a href="/Products?category=boys" class="chip @(currentCategory == "boys" ? "selected" : "")">Boys</a>
+                <a href="/Products?category=girls" class="chip @(currentCategory == "girls" ? "selected" : "")">Girls</a>
+                <a href="/Products?category=men" class="chip @(currentCategory == "men" ? "selected" : "")">Men</a>
+                <a href="/Products?category=women" class="chip @(currentCategory == "women" ? "selected" : "")">Women</a>
+            </div>
+        </div>
+
+        <!-- Price Range -->
+        <div class="mb-5">
+            <h4 class="text-sm font-semibold mb-3">Price Range</h4>
+            <div class="flex gap-3 items-center">
+                <input type="number" name="MinPrice" class="form-input" placeholder="Min" min="0" style="width:100px" value="@Model.MinPrice" />
+                <span class="text-secondary">&mdash;</span>
+                <input type="number" name="MaxPrice" class="form-input" placeholder="Max" min="0" style="width:100px" value="@Model.MaxPrice" />
+            </div>
+        </div>
+
+        <!-- Sort -->
+        <div class="mb-5">
+            <h4 class="text-sm font-semibold mb-3">Sort By</h4>
+            <select name="sort" class="form-input" id="sort-select">
+                <option value="">Relevance</option>
+                <option value="price_asc">Price: Low to High</option>
+                <option value="price_desc">Price: High to Low</option>
+                <option value="newest">Newest First</option>
+            </select>
+            <script>document.getElementById('sort-select').value = '@(currentSort ?? "")';</script>
+        </div>
+
+        <div class="flex gap-3 mt-6">
+            <a href="/Products" class="btn btn-outlined flex-1">Reset</a>
+            <button type="submit" class="btn btn-primary flex-1">Apply Filters</button>
+        </div>
+    </form>
+</div>
 
 <div style="height:var(--space-8)"></div>

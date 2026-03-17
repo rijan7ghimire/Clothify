@@ -9,32 +9,31 @@
 @if (Model.Product != null)
 {
     var p = Model.Product;
+    var firstVariant = p.Variants.FirstOrDefault(v => v.StockQuantity > 0);
 
-    <!-- Image Carousel -->
-    <div data-carousel style="margin:-1px -16px 0">
-        <div style="position:relative;overflow:hidden">
-            <div class="carousel-track" style="display:flex;transition:transform 0.4s ease">
-                @if (p.Images.Any())
-                {
-                    @foreach (var img in p.Images)
-                    {
-                        <div style="min-width:100%;aspect-ratio:3/4;background:var(--color-surface);position:relative">
-                            <img src="@img.ImageUrl" alt="@img.AltText" style="width:100%;height:100%;object-fit:contain" />
-                        </div>
-                    }
-                }
-                else
-                {
-                    <div style="min-width:100%;aspect-ratio:3/4;background:var(--color-surface);display:flex;align-items:center;justify-content:center;font-size:4rem">No Image</div>
-                }
-            </div>
+    <!-- Success/Error Messages -->
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <div style="background:#E8F5E9;color:#2E7D32;padding:12px 16px;font-size:14px;font-weight:500;display:flex;align-items:center;gap:8px">
+            <span>&#10003;</span> @Model.SuccessMessage
+            <a href="/Cart" style="margin-left:auto;color:#2E7D32;font-weight:600;text-decoration:underline">View Cart</a>
         </div>
-        <div class="carousel-dots">
-            @for (int i = 0; i < Math.Max(p.Images.Count, 3); i++)
-            {
-                <span class="dot @(i == 0 ? "active" : "")"></span>
-            }
-        </div>
+    }
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div style="background:#FFEBEE;color:#C62828;padding:12px 16px;font-size:14px">@Model.ErrorMessage</div>
+    }
+
+    <!-- Product Image -->
+    <div style="width:100%;aspect-ratio:3/4;background:var(--color-surface);position:relative;overflow:hidden">
+        @if (p.Images.Any())
+        {
+            <img src="@p.Images.First().ImageUrl" alt="@p.Name" style="width:100%;height:100%;object-fit:contain" />
+        }
+        @if (p.IsOnSale)
+        {
+            <span class="product-card__badge" style="position:absolute;top:12px;left:12px">-@p.DiscountPercent%</span>
+        }
     </div>
 
     <!-- Product Info -->
@@ -51,14 +50,13 @@
             }
         </div>
 
-        <!-- Rating -->
         @if (p.ReviewCount > 0)
         {
             <div class="flex items-center gap-2 mt-2">
                 <div class="star-rating">
                     @for (int i = 1; i <= 5; i++)
                     {
-                        <span class="star @(i <= Math.Round(p.AverageRating) ? "" : "empty")">★</span>
+                        <span class="star @(i <= Math.Round(p.AverageRating) ? "" : "empty")">&#9733;</span>
                     }
                 </div>
                 <span class="text-sm text-secondary">@p.AverageRating.ToString("N1") (@p.ReviewCount reviews)</span>
@@ -66,93 +64,136 @@
         }
     </div>
 
-    <!-- Size Selection -->
-    <div class="px-4 mb-4">
-        <div class="flex items-center justify-between mb-3">
-            <h3 class="text-sm font-semibold">Select Size</h3>
-            <button class="text-sm text-accent font-medium">Size Guide</button>
-        </div>
-        <div class="flex flex-wrap gap-2" data-chip-group id="size-chips">
-            @{
-                var sizes = p.Variants.Select(v => v.Size).Distinct();
-            }
-            @foreach (var size in sizes)
-            {
-                var inStock = p.Variants.Any(v => v.Size == size && v.StockQuantity > 0);
-                <span class="chip @(!inStock ? "disabled" : "")" style="@(!inStock ? "opacity:0.4;text-decoration:line-through;pointer-events:none" : "")" data-size="@size">@size</span>
-            }
-        </div>
-    </div>
+    <!-- Size & Color Selection + Add to Cart Form -->
+    <form method="post" id="product-form">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@p.Id" />
+        <input type="hidden" name="variantId" id="selected-variant-id" value="@(firstVariant?.Id ?? 0)" />
+        <input type="hidden" name="quantity" id="form-quantity" value="1" />
 
-    <!-- Color Selection -->
-    <div class="px-4 mb-4">
-        <h3 class="text-sm font-semibold mb-3">Color: <span id="selected-color" class="font-normal text-secondary">Select</span></h3>
-        <div class="flex gap-3" data-color-group>
-            @{
-                var colors = p.Variants.Select(v => v.Color).Distinct();
-                var colorMap = new Dictionary<string, string>
+        <!-- Size Selection -->
+        <div class="px-4 mb-4">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-sm font-semibold">Select Size <span class="text-error" id="size-error" style="display:none">*required</span></h3>
+            </div>
+            <div class="flex flex-wrap gap-2" id="size-chips">
+                @{
+                    var sizeList = p.Variants.Select(v => v.Size).Distinct().ToList();
+                }
+                @foreach (var size in sizeList)
                 {
-                    ["Black"] = "#111", ["White"] = "#FFF", ["Red"] = "#C62828", ["Blue"] = "#1565C0",
-                    ["Green"] = "#2E7D32", ["Beige"] = "#D4C5A9", ["Navy"] = "#1A237E", ["Grey"] = "#9E9E9E",
-                    ["Brown"] = "#5D4037", ["Pink"] = "#F48FB1"
-                };
-            }
-            @foreach (var color in colors)
-            {
-                var hex = colorMap.GetValueOrDefault(color, "#999");
-                <span class="color-circle" style="background:@hex;@(color == "White" ? "border:1px solid #ddd" : "")" title="@color" onclick="document.getElementById('selected-color').textContent='@color'"></span>
-            }
+                    var inStock = p.Variants.Any(v => v.Size == size && v.StockQuantity > 0);
+                    <button type="button" class="chip size-chip @(!inStock ? "disabled" : "") @(firstVariant?.Size == size ? "selected" : "")"
+                            data-size="@size"
+                            @(!inStock ? "disabled" : "")
+                            style="@(!inStock ? "opacity:0.4;text-decoration:line-through" : "")"
+                            onclick="selectSize(this, '@size')">
+                        @size
+                    </button>
+                }
+            </div>
         </div>
-    </div>
 
-    <!-- Quantity -->
-    <div class="px-4 mb-4">
-        <h3 class="text-sm font-semibold mb-3">Quantity</h3>
-        <div class="qty-selector">
-            <button class="qty-minus" disabled>−</button>
-            <span class="qty-selector__count">1</span>
-            <button class="qty-plus">+</button>
+        <!-- Color Selection -->
+        <div class="px-4 mb-4">
+            <h3 class="text-sm font-semibold mb-3">Color: <span id="selected-color-label" class="font-normal text-secondary">@(firstVariant?.Color ?? "Select")</span></h3>
+            <div class="flex flex-wrap gap-3" id="color-chips">
+                @{
+                    var colorList = p.Variants.Select(v => v.Color).Distinct().ToList();
+                    var colorMap = new Dictionary<string, string>
+                    {
+                        ["Black"]="#111",["White"]="#FFF",["Red"]="#C62828",["Blue"]="#1565C0",
+                        ["Green"]="#2E7D32",["Beige"]="#D4C5A9",["Navy"]="#1A237E",["Navy Blue"]="#1A237E",
+                        ["Grey"]="#9E9E9E",["Grey Melange"]="#BDBDBD",["Brown"]="#5D4037",["Pink"]="#F48FB1",
+                        ["Yellow"]="#FDD835",["Orange"]="#E65100",["Purple"]="#7B1FA2",["Maroon"]="#880E4F",
+                        ["Olive"]="#827717",["Cream"]="#FFF8E1",["Gold"]="#FFD600",["Silver"]="#BDBDBD",
+                        ["Magenta"]="#D81B60",["Khaki"]="#C5B358",["Tan"]="#D2B48C",["Teal"]="#00838F",
+                        ["Lavender"]="#CE93D8",["Peach"]="#FFCCBC",["Rust"]="#BF360C",["Charcoal"]="#37474F",
+                        ["Multi"]="linear-gradient(135deg,red,orange,yellow,green,blue)",["Nude"]="#E8CCBF",
+                        ["Copper"]="#B87333",["Bronze"]="#CD7F32",["Mushroom Brown"]="#8B7355",
+                        ["Sea Green"]="#2E8B57",["Turquoise Blue"]="#00ACC1",["Lime Green"]="#AEEA00",
+                        ["Off White"]="#FAF0E6",["Mustard"]="#E6A817",["Metallic"]="#AAA9AD",["Taupe"]="#483C32"
+                    };
+                }
+                @foreach (var color in colorList)
+                {
+                    var hex = colorMap.GetValueOrDefault(color, "#999");
+                    var isFirst = firstVariant?.Color == color;
+                    <button type="button" class="color-circle color-chip @(isFirst ? "selected" : "")"
+                            style="background:@hex;@(color == "White" || color == "Off White" || color == "Cream" ? "border:1px solid #ddd;" : "")"
+                            title="@color"
+                            data-color="@color"
+                            onclick="selectColor(this, '@color')">
+                    </button>
+                }
+            </div>
         </div>
-    </div>
 
-    <!-- Description Accordion -->
-    <div class="accordion">
+        <!-- Quantity -->
+        <div class="px-4 mb-4">
+            <h3 class="text-sm font-semibold mb-3">Quantity</h3>
+            <div class="qty-selector">
+                <button type="button" class="qty-minus" disabled onclick="changeQty(-1)">&#8722;</button>
+                <span class="qty-selector__count" id="qty-display">1</span>
+                <button type="button" class="qty-plus" onclick="changeQty(1)">+</button>
+            </div>
+            <span class="text-xs text-secondary mt-2" id="stock-info" style="display:block;margin-top:4px">
+                @if (firstVariant != null)
+                {
+                    <text>@firstVariant.StockQuantity in stock</text>
+                }
+            </span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="height:120px"></div>
+        <div class="sticky-bottom" style="display:flex;flex-direction:column;gap:8px">
+            <div class="flex gap-3">
+                <button type="submit" asp-page-handler="AddToCart" class="btn btn-outlined btn-lg flex-1"
+                        style="border-color:var(--color-primary)">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                    Add to Cart
+                </button>
+                <button type="submit" asp-page-handler="BuyNow" class="btn btn-primary btn-lg flex-1">
+                    Buy Now — $@p.Price.ToString("N2")
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Description -->
+    <div class="accordion" style="margin-top:-80px;padding-top:0">
         <div class="accordion__item open">
             <div class="accordion__header">
                 Description
-                <span class="arrow">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-                </span>
+                <span class="arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
             </div>
             <div class="accordion__body">
                 <div class="accordion__content">
-                    @(p.Description ?? "Premium quality clothing made with the finest materials. Designed for comfort and style.")
+                    @(p.Description ?? "Premium quality clothing made with the finest materials.")
                 </div>
             </div>
         </div>
         <div class="accordion__item">
             <div class="accordion__header">
                 Shipping & Returns
-                <span class="arrow">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-                </span>
+                <span class="arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
             </div>
             <div class="accordion__body">
                 <div class="accordion__content">
-                    Free shipping on orders over $50. Standard delivery in 5-7 business days. Easy 30-day returns.
+                    Free shipping on orders over $50. Standard delivery 5-7 business days. Easy 30-day returns.
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Reviews Preview -->
+    <!-- Reviews -->
     @if (p.RecentReviews.Any())
     {
         <div class="section-header mt-4">
             <h2 class="section-header__title">Reviews (@p.ReviewCount)</h2>
-            <a href="#" class="section-header__link">View All</a>
         </div>
-        <div class="px-4">
+        <div class="px-4 mb-6">
             @foreach (var review in p.RecentReviews)
             {
                 <div class="py-3 border-b">
@@ -160,7 +201,7 @@
                         <div class="star-rating" style="font-size:12px">
                             @for (int i = 1; i <= 5; i++)
                             {
-                                <span class="star @(i <= review.Rating ? "" : "empty")">★</span>
+                                <span class="star @(i <= review.Rating ? "" : "empty")">&#9733;</span>
                             }
                         </div>
                         <span class="text-xs text-secondary">@review.UserName</span>
@@ -175,15 +216,68 @@
         </div>
     }
 
-    <div style="height:80px"></div>
+    <!-- Variant data for JS -->
+    <script>
+        var variants = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(p.Variants.Select(v => new {
+            v.Id, v.Size, v.Color, v.StockQuantity
+        })));
 
-    <!-- Sticky Add to Cart -->
-    <div class="sticky-bottom flex gap-3">
-        <button class="btn btn-icon btn-outlined" onclick="Clothify.toggleWishlist(this)">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-        </button>
-        <button class="btn btn-primary btn-lg flex-1" onclick="Clothify.toast('Added to cart!','success')">
-            Add to Cart — $@p.Price.ToString("N2")
-        </button>
+        var selectedSize = '@(firstVariant?.Size ?? "")';
+        var selectedColor = '@(firstVariant?.Color ?? "")';
+        var currentQty = 1;
+
+        function updateVariant() {
+            var match = variants.find(v => v.Size === selectedSize && v.Color === selectedColor && v.StockQuantity > 0);
+            if (!match) {
+                // Try any variant with selected size
+                match = variants.find(v => v.Size === selectedSize && v.StockQuantity > 0);
+            }
+            if (!match) {
+                match = variants.find(v => v.StockQuantity > 0);
+            }
+            if (match) {
+                document.getElementById('selected-variant-id').value = match.Id;
+                document.getElementById('stock-info').textContent = match.StockQuantity + ' in stock';
+            }
+        }
+
+        function selectSize(el, size) {
+            document.querySelectorAll('.size-chip').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedSize = size;
+            document.getElementById('size-error').style.display = 'none';
+            updateVariant();
+        }
+
+        function selectColor(el, color) {
+            document.querySelectorAll('.color-chip').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedColor = color;
+            document.getElementById('selected-color-label').textContent = color;
+            updateVariant();
+        }
+
+        function changeQty(delta) {
+            currentQty = Math.max(1, Math.min(10, currentQty + delta));
+            document.getElementById('qty-display').textContent = currentQty;
+            document.getElementById('form-quantity').value = currentQty;
+            document.querySelector('.qty-minus').disabled = currentQty <= 1;
+        }
+
+        document.getElementById('product-form').addEventListener('submit', function(e) {
+            if (!selectedSize || document.getElementById('selected-variant-id').value === '0') {
+                e.preventDefault();
+                document.getElementById('size-error').style.display = 'inline';
+                document.querySelector('.size-chip')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    </script>
+}
+else
+{
+    <div class="empty-state">
+        <div class="empty-state__icon">&#128683;</div>
+        <h3 class="empty-state__title">Product not found</h3>
+        <a href="/Products" class="btn btn-primary mt-4">Browse Products</a>
     </div>
 }

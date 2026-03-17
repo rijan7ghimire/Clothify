@@ -31,13 +31,24 @@ public class ProductRepository : Repository<Product>, IProductRepository
 
     public async Task<Product?> GetProductWithDetailsAsync(int id)
     {
-        return await _dbSet
+        var product = await _dbSet
             .Include(p => p.Category)
             .Include(p => p.Images.OrderBy(i => i.DisplayOrder))
             .Include(p => p.Variants)
-            .Include(p => p.Reviews.OrderByDescending(r => r.CreatedAt).Take(3))
+            .Include(p => p.Reviews)
                 .ThenInclude(r => r.User)
             .FirstOrDefaultAsync(p => p.Id == id);
+
+        // SQLite doesn't support APPLY, so limit reviews in memory
+        if (product != null)
+        {
+            product.Reviews = product.Reviews
+                .OrderByDescending(r => r.CreatedAt)
+                .Take(5)
+                .ToList();
+        }
+
+        return product;
     }
 
     public async Task<(IEnumerable<Product> Products, int TotalCount)> SearchProductsAsync(

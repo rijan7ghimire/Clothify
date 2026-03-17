@@ -97,6 +97,7 @@
                         <th>Total</th>
                         <th>Status</th>
                         <th>Date</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -109,11 +110,28 @@
                                 <td>@order.CustomerName</td>
                                 <td class="font-semibold">$@order.Total.ToString("N2")</td>
                                 <td>
-                                    <span class="badge @(order.Status switch { "Delivered" => "badge-success", "Shipped" => "badge-info", "Processing" => "badge-warning", "Cancelled" => "badge-error", _ => "badge-neutral" })">
+                                    <span class="badge @(order.Status switch { "Delivered" => "badge-success", "Confirmed" => "badge-info", "Shipped" => "badge-info", "Processing" => "badge-warning", "Placed" => "badge-warning", "Cancelled" => "badge-error", _ => "badge-neutral" })">
                                         @order.Status
                                     </span>
                                 </td>
                                 <td class="text-secondary">@order.Date.ToString("MMM dd")</td>
+                                <td>
+                                    @if (order.Status != "Delivered" && order.Status != "Cancelled")
+                                    {
+                                        <form method="post" asp-page-handler="UpdateStatus" style="display:inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="orderId" value="@order.Id" />
+                                            <select name="newStatus" onchange="this.form.submit()" class="form-input" style="min-height:32px;padding:4px 8px;font-size:11px;width:auto">
+                                                <option value="">Update...</option>
+                                                <option value="Confirmed">Confirmed</option>
+                                                <option value="Processing">Processing</option>
+                                                <option value="Shipped">Shipped</option>
+                                                <option value="Delivered">Delivered</option>
+                                                <option value="Cancelled">Cancelled</option>
+                                            </select>
+                                        </form>
+                                    }
+                                </td>
                             </tr>
                         }
                     }

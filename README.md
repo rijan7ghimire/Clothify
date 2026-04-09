@@ -1,242 +1,135 @@
-# Clothify
+# Clothify - Mobile-First E-Commerce Web Application
 
-A mobile-first e-commerce clothing platform built with .NET 10, featuring 2,906 real products with images, Nepali Rupee pricing, Khalti/eSewa payment integration, and a full admin dashboard.
-
-![.NET 10](https://img.shields.io/badge/.NET-10.0-purple)
-![Razor Pages](https://img.shields.io/badge/Frontend-Razor%20Pages-blue)
-![SQLite](https://img.shields.io/badge/Database-SQLite-green)
-![Products](https://img.shields.io/badge/Products-2%2C906-orange)
+**Module:** CT081-3-3 Mobile and Web Multimedia
+**Framework:** ASP.NET Web Forms | HTML5 | CSS3 | JavaScript | Microsoft SQL Server
 
 ---
 
-## Quick Start
+## Introduction
 
-### Prerequisites
-- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) (only requirement)
-
-### Run in 3 commands
-```bash
-git clone https://github.com/rijan7ghimire/Clothify.git
-cd Clothify
-dotnet run --project src/Clothify.Web --urls "http://localhost:5010"
-```
-
-Open **http://localhost:5010** in your browser.
-
-> The app automatically creates the SQLite database, runs migrations, and seeds all 2,906 products on first startup. No manual DB setup needed.
-
-### Login Credentials
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | `admin@clothify.com` | `Admin@123!` |
-| Customer | `sarah@example.com` | `Customer@123!` |
-
-Or register a new account at `/Auth/Register`.
-
----
-
-## Install on Phone (PWA)
-
-Clothify is a **Progressive Web App** — it installs on your phone like a native app, no app store needed.
-
-### Step 1: Find your PC's IP
-
-```bash
-ipconfig
-```
-
-Look for `IPv4 Address` (e.g. `192.168.1.5`). Your phone must be on the **same WiFi**.
-
-### Step 2: Run the app
-
-```bash
-dotnet run --project src/Clothify.Web --urls "http://0.0.0.0:5010"
-```
-
-### Step 3: Install on your phone
-
-**Android (Chrome):**
-1. Open `http://192.168.1.5:5010` in Chrome
-2. Tap the **"Install Clothify"** banner at the bottom, OR
-3. Chrome menu (3 dots) > **"Add to Home Screen"**
-
-**iOS (Safari):**
-1. Open `http://192.168.1.5:5010` in Safari
-2. Tap the **Share** button (box with arrow)
-3. Scroll down > **"Add to Home Screen"** > **Add**
-
-### Firewall (if phone can't connect)
-
-Run this in an **admin terminal** on your PC:
-
-```powershell
-netsh advfirewall firewall add rule name="Clothify" dir=in action=allow protocol=TCP localport=5010
-```
-
-### What you get
-
-- App icon on home screen (black "C" with gold "CLOTHIFY")
-- Opens fullscreen — no browser address bar
-- Offline support for cached pages and product images
-- App shortcuts: long-press icon for Search, Cart, Orders
-- Optimized for iPhone 17 / Dynamic Island (safe area insets)
-- Smooth scrolling, no rubber-band bounce, proper touch targets
-
----
+Clothify is a mobile-optimized E-Commerce web application designed as a platform for users to buy clothing and fashion products through an interactive and secure mobile web interface. It demonstrates effective use of interactive multimedia features while meeting the academic requirements of the Mobile and Web Multimedia module.
 
 ## Features
 
-### Customer-Facing
-- **Home** — Hero banners, category scroll with product images, featured products grid, new arrivals
-- **Product Listing** — Filter by category (Boys, Girls, Men, Women), sort by price/newest, pagination
-- **Product Detail** — Size/color selection, quantity selector, reviews, Add to Cart + Buy Now
-- **Search** — Text search with trending tags, filter bottom sheet (size, color, price range)
-- **Cart** — Item list with quantity controls, promo code input, order summary
-- **Checkout** — Address form with autofill ("Same as me"), Khalti/eSewa/COD payment options
-- **Payment** — Khalti & eSewa payment simulation pages
-- **Order Tracking** — 6-step timeline (Placed > Confirmed > Processing > Shipped > Out for Delivery > Delivered)
-- **Profile** — Edit personal info, saved addresses (add/delete), change password, order history, help center
+### Customer Features
+- **Registration & Authentication** – Secure user signup and login with password hashing
+- **Product Browsing** – Search products, filter by categories, view detailed product pages
+- **Shopping Cart** – Add/remove items, update quantities, view subtotal and delivery fee
+- **Checkout** – Nepal-specific shipping address (Province, District, Municipality, Ward No., Landmark) with multiple payment methods (Cash on Delivery, eSewa, Khalti, Bank Transfer)
+- **Order Management** – View order history, filter by status, track delivery progress
+- **Delivery Tracking** – Visual timeline showing order progression (Placed → Processing → Shipped → Delivered)
+- **Customer Feedback** – Rate products (1–5) and leave comments
 
-### Admin Dashboard (`/Admin`)
-- KPI cards (Revenue, Orders, Customers, Conversion)
-- Recent orders table with status dropdown (update to Confirmed/Shipped/Delivered)
-- Low stock alerts
-
----
+### Admin Features
+- **Dashboard** – Overview with KPIs (Total Orders, Pending, Delivered, Total Users)
+- **Manage Users** – View, edit roles, and delete users
+- **Manage Products** – Full CRUD operations with category assignment
+- **Manage Categories** – Create, edit, and delete product categories
+- **Manage Orders** – Update order status, view order details and shipping info
+- **Manage Feedback** – View and moderate customer reviews
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Backend | ASP.NET Core .NET 10, C# |
-| Frontend | Razor Pages + Custom CSS Framework (900+ lines) |
-| Database | SQLite via Entity Framework Core 10 |
-| Auth | ASP.NET Core Identity (cookie auth) |
-| Architecture | Clean Architecture (5 projects) |
-| API | RESTful with Swagger (`/swagger` on API project) |
-| Mobile | PWA (installable on Android/iOS, offline support) |
-| Payments | Khalti, eSewa, Cash on Delivery |
-| Currency | Nepali Rupees (Rs.) with 13% VAT |
+| Component | Technology |
+|-----------|-----------|
+| Framework | ASP.NET Web Forms (.NET Framework 4.8) |
+| Language | C# |
+| Database | Microsoft SQL Server |
+| Data Access | ADO.NET (SqlConnection, SqlCommand, SqlDataAdapter) |
+| Authentication | ASP.NET Forms Authentication |
+| Frontend | HTML5, CSS3 (Mobile-First), JavaScript |
+| Password Security | BCrypt hashing |
 
----
+## Database Schema
 
-## Mobile Compatibility
+The application uses 8 database tables:
 
-Tested and optimized for:
-
-- iPhone 17 / 17 Pro / 17 Pro Max (Dynamic Island, safe areas)
-- iPhone 15/16 series (notch)
-- Android phones (Chrome PWA install)
-- iPad / Android tablets (3-column grid)
-- Desktop browsers (4-column grid, sidebar nav)
-
-**Key mobile optimizations:**
-
-- `viewport-fit=cover` for edge-to-edge rendering
-- `env(safe-area-inset-*)` for Dynamic Island, notch, and home indicator
-- 48px minimum touch targets on all buttons
-- 16px minimum input font size (prevents iOS auto-zoom)
-- `overscroll-behavior: contain` (no pull-to-refresh bounce in PWA)
-- Momentum scrolling on horizontal product carousels
-- Product images use `object-fit: cover` with 3:4 aspect ratio
-
----
+| Table | Description |
+|-------|-------------|
+| **Roles** | User roles (Admin, Customer) |
+| **Users** | User accounts with hashed passwords |
+| **Categories** | Product categories |
+| **Products** | Product catalog with pricing and stock |
+| **Orders** | Customer orders with Nepal shipping addresses |
+| **OrderItems** | Individual items within each order |
+| **Payments** | Payment records (COD, eSewa, Khalti, Bank Transfer) |
+| **Feedback** | Customer ratings and comments |
 
 ## Project Structure
+
 ```
-Clothify.sln
-├── src/
-│   ├── Clothify.Core/             # Entities, Enums, Interfaces
-│   ├── Clothify.Application/      # Services, DTOs, AutoMapper
-│   ├── Clothify.Infrastructure/   # EF Core, Repositories, Data Seeder
-│   ├── Clothify.API/              # REST API Controllers, JWT Auth
-│   └── Clothify.Web/              # Razor Pages (all screens)
-│       ├── Pages/
-│       │   ├── Home/              # Landing page
-│       │   ├── Auth/              # Login, Register
-│       │   ├── Products/          # Listing, Detail, Search
-│       │   ├── Cart/              # Shopping cart
-│       │   ├── Checkout/          # Checkout + Payment
-│       │   ├── Orders/            # History, Tracking, Confirmation
-│       │   ├── Profile/           # Edit, Addresses, Password, Help
-│       │   └── Admin/             # Dashboard
-│       └── wwwroot/
-│           ├── css/clothify.css   # Mobile-first CSS framework
-│           ├── js/clothify.js     # UI interactions
-│           └── images/products/   # 2,906 product images
-└── data/
-    ├── fashion.csv                # Product dataset (2,906 items)
-    ├── Apparel/                   # Boys & Girls clothing images
-    └── Footwear/                  # Men & Women shoe images
-```
-
----
-
-## Seeded Data
-
-| Data | Count |
-|------|-------|
-| Products | 2,906 |
-| Product Images | 2,906 (local JPGs) |
-| Product Variants | ~9,000 (sizes/colors) |
-| Categories | 20 (4 top-level + 16 sub) |
-| Users | 6 (1 admin + 5 customers) |
-| Reviews | ~1,500 |
-| Orders | 12 |
-| Coupons | 3 (WELCOME20, SAVE500, SPRING30) |
-
-### Categories
-- **Boys** — Topwear, Bottomwear, Apparel Sets, Innerwear
-- **Girls** — Topwear, Bottomwear, Dresses, Apparel Sets, Innerwear
-- **Men** — Shoes, Sandals, Flip Flops
-- **Women** — Shoes, Sandals, Flip Flops, Heels
-
----
-
-## Pricing (Nepali Rupees)
-
-| Category | Price Range |
-|----------|------------|
-| Men's Shoes | Rs. 3,500 - 18,000 |
-| Women's Shoes | Rs. 2,500 - 15,000 |
-| Sandals | Rs. 1,500 - 6,000 |
-| Kids Tops | Rs. 800 - 4,500 |
-| Dresses | Rs. 1,800 - 8,000 |
-| Free shipping | Orders over Rs. 5,000 |
-| Tax | 13% VAT |
-
----
-
-## API Endpoints
-
-The REST API runs separately on `https://localhost:7001` with Swagger docs:
-
-```bash
-dotnet run --project src/Clothify.API
+Clothify/
+├── Admin/                    # Admin panel pages
+│   ├── AdminMaster.master    # Admin layout master page
+│   ├── Dashboard.aspx        # Admin dashboard
+│   ├── ManageUsers.aspx      # User management
+│   ├── ManageProducts.aspx   # Product management
+│   ├── ManageCategories.aspx # Category management
+│   ├── ManageOrders.aspx     # Order management
+│   └── ManageFeedback.aspx   # Feedback management
+├── App_Code/                 # Shared code classes
+│   ├── DBHelper.cs           # Database helper (ADO.NET)
+│   └── CartItem.cs           # Shopping cart item model
+├── css/
+│   └── style.css             # Mobile-first stylesheet
+├── js/
+│   └── script.js             # Client-side JavaScript
+├── Images/                   # Product images
+├── SQL/
+│   └── Database.sql          # Database creation script
+├── Site.Master               # Main layout master page
+├── Default.aspx              # Home page
+├── Products.aspx             # Product listing & search
+├── ProductDetail.aspx        # Product detail with reviews
+├── Cart.aspx                 # Shopping cart
+├── Checkout.aspx             # Checkout with shipping & payment
+├── Orders.aspx               # Order history
+├── OrderTracking.aspx        # Delivery tracking
+├── Feedback.aspx             # Submit product feedback
+├── Login.aspx                # User login
+├── Register.aspx             # User registration
+├── Profile.aspx              # User profile
+├── EditProfile.aspx          # Edit profile details
+├── ChangePassword.aspx       # Change password
+├── Web.config                # Application configuration
+└── Global.asax               # Application lifecycle events
 ```
 
-| Endpoint | Description |
-|----------|-------------|
-| `POST /api/auth/login` | Login (returns JWT) |
-| `POST /api/auth/register` | Register new user |
-| `GET /api/products` | Search/filter products |
-| `GET /api/products/{id}` | Product detail |
-| `GET /api/cart` | Get user cart |
-| `POST /api/cart/items` | Add to cart |
-| `POST /api/orders` | Place order |
-| `GET /api/orders` | Order history |
-| `GET /api/admin/dashboard` | Admin KPIs |
+## Setup Instructions
 
----
+### Prerequisites
+- Visual Studio 2019 or later
+- Microsoft SQL Server (or SQL Server Express)
+- .NET Framework 4.8
 
-## Screenshots
+### Steps
 
-| Home | Product Detail | Cart | Checkout |
-|------|---------------|------|----------|
-| Category scroll, banners, product grid | Image, size/color picker, reviews | Items, quantity, promo code | Address, payment (Khalti/eSewa/COD) |
+1. **Create the Database**
+   - Open SQL Server Management Studio (SSMS)
+   - Execute the script at `SQL/Database.sql` to create the database, tables, and seed data
 
----
+2. **Configure Connection String**
+   - Open `Web.config`
+   - Update the `ClothifyDB` connection string to match your SQL Server instance:
+     ```xml
+     <add name="ClothifyDB" connectionString="Server=YOUR_SERVER;Database=ClothifyDB;Trusted_Connection=True;" />
+     ```
 
-## License
+3. **Run the Application**
+   - Open `Clothify.sln` in Visual Studio
+   - Press `F5` or click **Start** to run
 
-MIT
+### Default Admin Account
+- **Email:** admin@clothify.com
+- **Password:** Admin@123
+
+## Currency
+
+All prices are displayed in **Nepalese Rupees (NPR)** formatted as `Rs. X,XXX`.
+
+## Design Approach
+
+- **Mobile-First** – Max-width 480px container optimized for mobile devices
+- **Fixed Navigation** – Top header with branding + bottom navigation bar (Home, Shop, Orders, Profile)
+- **Responsive** – Scales up to 768px+ for tablet/desktop viewing
+- **Accessible** – Clear form labels, validation messages, and status indicators

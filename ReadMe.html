@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clothify - Setup &amp; Configuration Guide</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; }
+        .header { background: #1a1a1a; color: #fff; padding: 30px 20px; text-align: center; }
+        .header h1 { font-size: 28px; letter-spacing: 4px; margin-bottom: 8px; }
+        .header p { font-size: 14px; color: #aaa; letter-spacing: 1px; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px 16px 40px; }
+        .card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 16px; border: 1px solid #eee; }
+        .card h2 { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #1a1a1a; }
+        .card h3 { font-size: 14px; font-weight: 600; margin: 12px 0 8px; color: #555; }
+        .credential { background: #f9f9f9; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; }
+        .credential label { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+        .credential span { font-size: 15px; font-weight: 600; color: #1a1a1a; font-family: monospace; }
+        ol { padding-left: 20px; }
+        ol li { margin-bottom: 10px; font-size: 14px; }
+        ul { padding-left: 20px; list-style: disc; }
+        ul li { margin-bottom: 6px; font-size: 14px; }
+        .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .tech-item { background: #f9f9f9; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center; }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; background: #e8f5e9; color: #2e7d32; margin-left: 8px; }
+        .warning { background: #fff3e0; border-left: 4px solid #f57c00; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; font-size: 13px; color: #e65100; }
+        .footer { text-align: center; padding: 20px; font-size: 12px; color: #999; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CLOTHIFY</h1>
+        <p>Setup &amp; Configuration Guide</p>
+    </div>
+
+    <div class="container">
+
+        <!-- Admin Credentials -->
+        <div class="card">
+            <h2>Admin Credentials</h2>
+            <div class="credential">
+                <label>Email</label>
+                <span>admin@clothify.com</span>
+            </div>
+            <div class="credential">
+                <label>Password</label>
+                <span>Admin@123</span>
+            </div>
+            <div class="credential">
+                <label>Role</label>
+                <span>Administrator</span>
+            </div>
+        </div>
+
+        <!-- Customer Test Account -->
+        <div class="card">
+            <h2>Customer Test Account</h2>
+            <div class="credential">
+                <label>Email</label>
+                <span>test@customer.com</span>
+            </div>
+            <div class="credential">
+                <label>Password</label>
+                <span>Test@123</span>
+            </div>
+            <div class="credential">
+                <label>Role</label>
+                <span>Customer</span>
+            </div>
+            <p style="font-size: 12px; color: #888; margin-top: 8px;">
+                * You can also register a new customer account via the Registration page.
+            </p>
+        </div>
+
+        <!-- Setup Instructions -->
+        <div class="card">
+            <h2>Setup Instructions</h2>
+            <h3>Prerequisites</h3>
+            <ul>
+                <li>Visual Studio 2022 (Community/Professional/Enterprise)</li>
+                <li>"ASP.NET and web development" workload installed</li>
+                <li>SQL Server Express LocalDB (included with Visual Studio)</li>
+            </ul>
+
+            <h3>Steps to Run</h3>
+            <ol>
+                <li>Open <strong>Clothify.sln</strong> in Visual Studio 2022.</li>
+                <li>In Solution Explorer, right-click the <strong>App_Data</strong> folder &rarr; <strong>Add</strong> &rarr; <strong>SQL Server Database</strong>.</li>
+                <li>Name it <strong>ClothifyDB.mdf</strong> and click OK.</li>
+                <li>Double-click <strong>ClothifyDB.mdf</strong> in App_Data to open it in Server Explorer.</li>
+                <li>Right-click on the database connection &rarr; <strong>New Query</strong>.</li>
+                <li>Open <strong>SQL/Database.sql</strong>, copy the entire script, paste it into the query window, and execute (<strong>Ctrl+Shift+E</strong>).</li>
+                <li>Press <strong>F5</strong> (or click Start) to run the application.</li>
+                <li>The application will open in your default browser.</li>
+            </ol>
+
+            <div class="warning">
+                <strong>Note:</strong> The connection string in Web.config uses AttachDbFilename with LocalDB.
+                No external SQL Server installation is required. The database file is stored in the App_Data folder.
+            </div>
+        </div>
+
+        <!-- Technologies Used -->
+        <div class="card">
+            <h2>Technologies Used</h2>
+            <div class="tech-grid">
+                <div class="tech-item">ASP.NET Web Forms</div>
+                <div class="tech-item">C# (.NET 4.8)</div>
+                <div class="tech-item">HTML5</div>
+                <div class="tech-item">CSS3</div>
+                <div class="tech-item">JavaScript</div>
+                <div class="tech-item">SQL Server</div>
+                <div class="tech-item">ADO.NET</div>
+                <div class="tech-item">BCrypt.NET</div>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="card">
+            <h2>Features</h2>
+
+            <h3>Customer Features</h3>
+            <ul>
+                <li>User Registration &amp; Login with password hashing</li>
+                <li>Product Catalog with category filtering &amp; search</li>
+                <li>Product Detail with ratings &amp; reviews</li>
+                <li>Shopping Cart (add, remove, update quantity)</li>
+                <li>Checkout with Nepal shipping address &amp; multiple payment methods</li>
+                <li>Order History with status filtering</li>
+                <li>Order Tracking with visual timeline</li>
+                <li>Order Cancellation (for pending orders)</li>
+                <li>Wishlist (save products for later)</li>
+                <li>Customer Feedback &amp; Ratings (1-5 stars)</li>
+                <li>Profile Management (edit profile, change password)</li>
+                <li>Notifications page for order updates</li>
+                <li>Email notifications on order placement</li>
+            </ul>
+
+            <h3>Admin Features</h3>
+            <ul>
+                <li>Admin Dashboard with statistics overview</li>
+                <li>Manage Users (view, update role, delete)</li>
+                <li>Manage Products (CRUD operations)</li>
+                <li>Manage Categories (CRUD operations)</li>
+                <li>Manage Orders (update status: Placed/Processing/Shipped/Delivered/Cancelled)</li>
+                <li>Manage Feedback (view, filter by rating, delete)</li>
+                <li>Sales Reports &amp; Analytics Dashboard</li>
+                <li>Email notification on order status change</li>
+            </ul>
+
+            <h3>Technical Features</h3>
+            <ul>
+                <li>Mobile-first responsive design</li>
+                <li>ASP.NET Forms Authentication &amp; Authorization</li>
+                <li>ASP.NET Web Forms User Controls (.ascx)</li>
+                <li>Advanced controls: Repeater, DataList, GridView, DetailView</li>
+                <li>Data binding with parameterized SQL queries</li>
+                <li>Client-side &amp; server-side form validation</li>
+                <li>Session-based shopping cart</li>
+                <li>Secure password hashing with BCrypt</li>
+                <li>Master Pages for consistent layout</li>
+                <li>Proper file organization &amp; naming conventions</li>
+            </ul>
+        </div>
+
+        <!-- Browser Compatibility -->
+        <div class="card">
+            <h2>Browser Compatibility</h2>
+            <p style="font-size: 14px; margin-bottom: 12px;">
+                This application has been designed and tested to work across all modern browsers:
+            </p>
+            <ul>
+                <li>Google Chrome <span class="badge">Recommended</span></li>
+                <li>Microsoft Edge</li>
+                <li>Mozilla Firefox</li>
+                <li>Opera</li>
+                <li>Safari (macOS/iOS)</li>
+            </ul>
+            <p style="font-size: 13px; color: #888; margin-top: 12px;">
+                The application uses standard HTML5, CSS3, and JavaScript (ECMAScript) for maximum compatibility.
+                Mobile-first design ensures optimal viewing on smartphones and tablets.
+            </p>
+        </div>
+
+        <!-- Project Structure -->
+        <div class="card">
+            <h2>Project Structure</h2>
+            <pre style="background: #f9f9f9; padding: 16px; border-radius: 8px; font-size: 12px; overflow-x: auto; line-height: 1.8;">
+Clothify/
++-- Admin/                  (Admin pages)
+|   +-- AdminMaster.master  (Admin layout)
+|   +-- Dashboard.aspx      (Admin dashboard)
+|   +-- ManageUsers.aspx
+|   +-- ManageProducts.aspx
+|   +-- ManageCategories.aspx
+|   +-- ManageOrders.aspx
+|   +-- ManageFeedback.aspx
+|   +-- Reports.aspx
++-- App_Code/               (Shared code)
+|   +-- DBHelper.cs         (Database helper)
+|   +-- CartItem.cs         (Cart model)
+|   +-- EmailHelper.cs      (Email utility)
++-- App_Data/               (Database files)
+|   +-- ClothifyDB.mdf
++-- Controls/               (User controls)
+|   +-- ProductCard.ascx
+|   +-- OrderStatusBadge.ascx
+|   +-- StarRating.ascx
+|   +-- NotificationBar.ascx
++-- css/style.css           (Stylesheet)
++-- js/script.js            (JavaScript)
++-- Images/                 (Product images)
++-- SQL/Database.sql        (DB script)
++-- Site.Master             (Main layout)
++-- Default.aspx            (Home page)
++-- Products.aspx           (Product listing)
++-- ProductDetail.aspx      (Product detail)
++-- Cart.aspx               (Shopping cart)
++-- Checkout.aspx           (Checkout)
++-- Orders.aspx             (Order history)
++-- OrderTracking.aspx      (Delivery tracking)
++-- Login.aspx              (Login)
++-- Register.aspx           (Registration)
++-- Profile.aspx            (User profile)
++-- EditProfile.aspx        (Edit profile)
++-- ChangePassword.aspx     (Change password)
++-- Feedback.aspx           (Customer feedback)
++-- Wishlist.aspx           (Wishlist)
++-- Notifications.aspx      (Notifications)
++-- ReadMe.html             (This file)
++-- Web.config              (Configuration)
+            </pre>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Clothify &copy; 2026 | CT081-3-3 Mobile &amp; Web Multimedia Assignment</p>
+    </div>
+</body>
+</html>

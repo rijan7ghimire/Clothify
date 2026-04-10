@@ -1,6 +1,6 @@
 namespace Clothify
 {
-    public partial class Profile
+    public partial class UserProfile
     {
         protected global::System.Web.UI.WebControls.Label lblFullName;
         protected global::System.Web.UI.WebControls.Label lblEmail;

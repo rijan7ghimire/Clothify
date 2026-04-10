@@ -152,7 +152,20 @@ Clothify/
 | Role | Email | Password |
 |------|-------|----------|
 | Admin | admin@clothify.com | Admin@123 |
-| Customer | *(Register a new account)* | |
+| Customer | test@customer.com | Test@123 |
+
+### eSewa Test Credentials (Sandbox)
+
+The application integrates with eSewa's sandbox payment gateway for testing:
+
+| Field | Value |
+|-------|-------|
+| eSewa ID | 9806800001 / 9806800002 / 9806800003 / 9806800004 / 9806800005 |
+| Password | Nepal@123 |
+| MPIN | 1122 |
+| OTP / Token | 123456 |
+
+> **Note:** These are eSewa's official sandbox test credentials. No real money is charged.
 
 ### Email Configuration (Optional)
 To enable email notifications, update the SMTP settings in `Web.config`:

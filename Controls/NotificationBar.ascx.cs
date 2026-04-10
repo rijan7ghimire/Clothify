@@ -6,7 +6,8 @@ namespace Clothify.Controls
     public partial class NotificationBarControl : UserControl
     {
         public string Message { get; set; }
-        public string MessageType { get; set; } = "info";
+        private string _messageType = "info";
+        public string MessageType { get { return _messageType; } set { _messageType = value; } }
 
         protected void Page_Load(object sender, EventArgs e)
         {

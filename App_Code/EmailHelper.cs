@@ -23,18 +23,18 @@ namespace Clothify.App_Code
                 mail.To.Add(toEmail);
                 mail.Subject = "Order Confirmation - " + orderNumber;
                 mail.IsBodyHtml = true;
-                mail.Body = $@"
+                mail.Body = string.Format(@"
                 <div style='font-family: Arial; max-width: 480px; margin: 0 auto; padding: 20px;'>
                     <h2 style='text-align: center;'>CLOTHIFY</h2>
                     <hr/>
                     <h3>Order Confirmed!</h3>
-                    <p>Dear {customerName},</p>
-                    <p>Thank you for your order. Your order <strong>{orderNumber}</strong> has been placed successfully.</p>
-                    <p><strong>Total Amount: Rs. {totalAmount:N0}</strong></p>
+                    <p>Dear {0},</p>
+                    <p>Thank you for your order. Your order <strong>{1}</strong> has been placed successfully.</p>
+                    <p><strong>Total Amount: Rs. {2}</strong></p>
                     <p>You can track your order status in the Orders section of your account.</p>
                     <hr/>
                     <p style='color: #888; font-size: 12px; text-align: center;'>Clothify - Fashion for Nepal</p>
-                </div>";
+                </div>", customerName, orderNumber, totalAmount.ToString("N0"));
 
                 SmtpClient smtp = new SmtpClient(smtpHost, smtpPort);
                 smtp.Credentials = new NetworkCredential(smtpUser, smtpPass);
@@ -64,17 +64,17 @@ namespace Clothify.App_Code
                 mail.To.Add(toEmail);
                 mail.Subject = "Order Update - " + orderNumber;
                 mail.IsBodyHtml = true;
-                mail.Body = $@"
+                mail.Body = string.Format(@"
                 <div style='font-family: Arial; max-width: 480px; margin: 0 auto; padding: 20px;'>
                     <h2 style='text-align: center;'>CLOTHIFY</h2>
                     <hr/>
                     <h3>Order Status Updated</h3>
-                    <p>Dear {customerName},</p>
-                    <p>Your order <strong>{orderNumber}</strong> status has been updated to: <strong>{newStatus}</strong></p>
+                    <p>Dear {0},</p>
+                    <p>Your order <strong>{1}</strong> status has been updated to: <strong>{2}</strong></p>
                     <p>You can view the full details in your account.</p>
                     <hr/>
                     <p style='color: #888; font-size: 12px; text-align: center;'>Clothify - Fashion for Nepal</p>
-                </div>";
+                </div>", customerName, orderNumber, newStatus);
 
                 SmtpClient smtp = new SmtpClient(smtpHost, smtpPort);
                 smtp.Credentials = new NetworkCredential(smtpUser, smtpPass);

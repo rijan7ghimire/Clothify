@@ -306,9 +306,15 @@
     <Compile Include="Controls\ProductCard.ascx.cs">
       <DependentUpon>ProductCard.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ProductCard.ascx.designer.cs">
+      <DependentUpon>ProductCard.ascx</DependentUpon>
+    </Compile>
 
     <Content Include="Controls\OrderStatusBadge.ascx" />
     <Compile Include="Controls\OrderStatusBadge.ascx.cs">
+      <DependentUpon>OrderStatusBadge.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OrderStatusBadge.ascx.designer.cs">
       <DependentUpon>OrderStatusBadge.ascx</DependentUpon>
     </Compile>
 
@@ -316,9 +322,15 @@
     <Compile Include="Controls\StarRating.ascx.cs">
       <DependentUpon>StarRating.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Controls\StarRating.ascx.designer.cs">
+      <DependentUpon>StarRating.ascx</DependentUpon>
+    </Compile>
 
     <Content Include="Controls\NotificationBar.ascx" />
     <Compile Include="Controls\NotificationBar.ascx.cs">
+      <DependentUpon>NotificationBar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NotificationBar.ascx.designer.cs">
       <DependentUpon>NotificationBar.ascx</DependentUpon>
     </Compile>
   </ItemGroup>

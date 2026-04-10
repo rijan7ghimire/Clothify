@@ -137,11 +137,13 @@ Clothify/
    - Right-click solution → **Restore NuGet Packages**
 
 2. **Create the Database**
-   - Right-click `App_Data` folder → **Add** → **SQL Server Database**
-   - Name it `ClothifyDB.mdf` and click OK
-   - Double-click `ClothifyDB.mdf` to open in Server Explorer
+   - In Visual Studio, go to **View** → **Server Explorer**
+   - Right-click **Data Connections** → **Add Connection**
+   - Server name: `(LocalDB)\MSSQLLocalDB`, click OK
    - Right-click the connection → **New Query**
-   - Open `SQL/Database.sql`, paste the script, and execute (Ctrl+Shift+E)
+   - Type: `CREATE DATABASE ClothifyDB` and press **Ctrl+Shift+E**
+   - Close that query, then right-click connection → **New Query** again
+   - Open the file `SQL/Database.sql` from the project, **copy all its contents**, paste into the query window, and press **Ctrl+Shift+E** to create all tables and seed data
 
 3. **Run the Application**
    - Press `F5` or click **Start** to run with IIS Express

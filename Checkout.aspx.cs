@@ -131,7 +131,7 @@ namespace Clothify
                 string paymentQuery = @"INSERT INTO Payments (PaymentMethod, PaymentStatus, PaymentDate, OrderID)
                                         VALUES (@PaymentMethod, @PaymentStatus, @PaymentDate, @OrderID)";
 
-                string paymentStatus = paymentMethod == "Cash on Delivery" ? "Pending" : "Pending";
+                string paymentStatus = (paymentMethod == "eSewa" || paymentMethod == "Khalti") ? "Pending" : "Pending";
                 DBHelper.ExecuteNonQuery(paymentQuery,
                     new SqlParameter("@PaymentMethod", paymentMethod),
                     new SqlParameter("@PaymentStatus", paymentStatus),
@@ -139,12 +139,20 @@ namespace Clothify
                     new SqlParameter("@OrderID", orderId)
                 );
 
-                // 4. Send order confirmation email
+                // 4. If eSewa payment, redirect to eSewa payment page
+                if (paymentMethod == "eSewa")
+                {
+                    Session["PendingOrderID"] = orderId;
+                    Session["PendingOrderTotal"] = totalAmount;
+                    Response.Redirect("~/EsewaPayment.aspx");
+                    return;
+                }
+
+                // 5. For other payment methods, send email and complete
                 string orderNumber = "CN-" + orderId.ToString("D5");
                 string customerEmail = "";
                 string customerName = txtFullName.Text.Trim();
 
-                // Get user email from database
                 DataRow userRow = DBHelper.ExecuteSingleRow(
                     "SELECT Email FROM Users WHERE UserID = @UserID",
                     new SqlParameter("@UserID", userId));

@@ -121,8 +121,14 @@ INSERT INTO Roles (RoleName) VALUES ('Admin'), ('Customer');
 -- Insert Admin User (Password: Admin@123)
 INSERT INTO Users (FullName, Email, PasswordHash, PhoneNumber, RoleID, CreatedAt)
 VALUES ('Admin User', 'admin@clothify.com',
-    'AQAAAAEAACcQAAAAEH0jA2VG5bVHqLOvMz8xPvGrKj3K9VfMn5kNQzXwT4sY7L8MpR2JFHtN6WdG3xKQA==',
+    'pBiIHdsZi2xJub6qZUpSzh2917fLqfKI2v8Na1OH6yJv9eULaBREAQR6MabuQ5mV',
     '9800000000', 1, GETDATE());
+
+-- Insert Test Customer (Password: Test@123)
+INSERT INTO Users (FullName, Email, PasswordHash, PhoneNumber, RoleID, CreatedAt)
+VALUES ('Test Customer', 'test@customer.com',
+    'YqzM2yHxDzI4tOlhtTT7l8/xZjtK8ynt0ay2/O00BPH+PIQ1C/4yizlZpPnKq2/o',
+    '9801234567', 2, GETDATE());
 
 -- Insert Categories
 INSERT INTO Categories (CategoryName, Description) VALUES

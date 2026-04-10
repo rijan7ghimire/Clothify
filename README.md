@@ -12,21 +12,35 @@ Clothify is a mobile-optimized E-Commerce web application designed as a platform
 ## Features
 
 ### Customer Features
-- **Registration & Authentication** – Secure user signup and login with password hashing
+- **Registration & Authentication** – Secure user signup and login with BCrypt password hashing
 - **Product Browsing** – Search products, filter by categories, view detailed product pages
 - **Shopping Cart** – Add/remove items, update quantities, view subtotal and delivery fee
 - **Checkout** – Nepal-specific shipping address (Province, District, Municipality, Ward No., Landmark) with multiple payment methods (Cash on Delivery, eSewa, Khalti, Bank Transfer)
 - **Order Management** – View order history, filter by status, track delivery progress
 - **Delivery Tracking** – Visual timeline showing order progression (Placed → Processing → Shipped → Delivered)
-- **Customer Feedback** – Rate products (1–5) and leave comments
+- **Order Cancellation** – Cancel pending orders with automatic stock restoration
+- **Wishlist** – Save products for later, move to cart directly
+- **Customer Feedback** – Rate products (1–5 stars) and leave comments
+- **Notifications** – View order status updates and alerts
+- **Email Notifications** – Receive order confirmation and status update emails
+- **Profile Management** – Edit profile details, change password
 
 ### Admin Features
 - **Dashboard** – Overview with KPIs (Total Orders, Pending, Delivered, Total Users)
-- **Manage Users** – View, edit roles, and delete users
+- **Manage Users** – View, edit roles, and delete users (GridView with inline editing)
 - **Manage Products** – Full CRUD operations with category assignment
 - **Manage Categories** – Create, edit, and delete product categories
-- **Manage Orders** – Update order status, view order details and shipping info
-- **Manage Feedback** – View and moderate customer reviews
+- **Manage Orders** – Update order status, view order details, shipping info, and items
+- **Manage Feedback** – View, filter by rating, and delete customer reviews
+- **Sales Reports** – Revenue analytics, monthly comparisons, top-selling products, recent orders
+
+### Technical Features
+- **ASP.NET Web Forms User Controls** (.ascx) – ProductCard, OrderStatusBadge, StarRating, NotificationBar
+- **Advanced Web Controls** – Repeater, DataList, GridView, DetailsView
+- **Data Binding** – Server controls bound to SQL data sources
+- **Form Validation** – RequiredFieldValidator, RegularExpressionValidator, CompareValidator
+- **Master Pages** – Site.Master (customer), AdminMaster.master (admin)
+- **Forms Authentication** – Role-based authorization (Admin/Customer)
 
 ## Tech Stack
 
@@ -34,11 +48,12 @@ Clothify is a mobile-optimized E-Commerce web application designed as a platform
 |-----------|-----------|
 | Framework | ASP.NET Web Forms (.NET Framework 4.8) |
 | Language | C# |
-| Database | Microsoft SQL Server |
+| Database | Microsoft SQL Server (LocalDB) |
 | Data Access | ADO.NET (SqlConnection, SqlCommand, SqlDataAdapter) |
 | Authentication | ASP.NET Forms Authentication |
 | Frontend | HTML5, CSS3 (Mobile-First), JavaScript |
-| Password Security | BCrypt hashing |
+| Password Security | BCrypt hashing (BCrypt.Net-Next) |
+| Email | System.Net.Mail (SMTP) |
 
 ## Database Schema
 
@@ -62,14 +77,22 @@ Clothify/
 ├── Admin/                    # Admin panel pages
 │   ├── AdminMaster.master    # Admin layout master page
 │   ├── Dashboard.aspx        # Admin dashboard
-│   ├── ManageUsers.aspx      # User management
+│   ├── ManageUsers.aspx      # User management (GridView)
 │   ├── ManageProducts.aspx   # Product management
 │   ├── ManageCategories.aspx # Category management
 │   ├── ManageOrders.aspx     # Order management
-│   └── ManageFeedback.aspx   # Feedback management
+│   ├── ManageFeedback.aspx   # Feedback management
+│   └── Reports.aspx          # Sales reports & analytics
 ├── App_Code/                 # Shared code classes
 │   ├── DBHelper.cs           # Database helper (ADO.NET)
-│   └── CartItem.cs           # Shopping cart item model
+│   ├── CartItem.cs           # Shopping cart item model
+│   └── EmailHelper.cs        # Email notification utility
+├── App_Data/                 # Database files (.mdf)
+├── Controls/                 # ASP.NET User Controls
+│   ├── ProductCard.ascx      # Reusable product card
+│   ├── OrderStatusBadge.ascx # Order status badge
+│   ├── StarRating.ascx       # Star rating display
+│   └── NotificationBar.ascx  # Alert/notification bar
 ├── css/
 │   └── style.css             # Mobile-first stylesheet
 ├── js/
@@ -77,20 +100,25 @@ Clothify/
 ├── Images/                   # Product images
 ├── SQL/
 │   └── Database.sql          # Database creation script
+├── Properties/
+│   └── AssemblyInfo.cs       # Assembly metadata
 ├── Site.Master               # Main layout master page
 ├── Default.aspx              # Home page
-├── Products.aspx             # Product listing & search
-├── ProductDetail.aspx        # Product detail with reviews
+├── Products.aspx             # Product listing (DataList)
+├── ProductDetail.aspx        # Product detail (DetailsView)
 ├── Cart.aspx                 # Shopping cart
 ├── Checkout.aspx             # Checkout with shipping & payment
 ├── Orders.aspx               # Order history
-├── OrderTracking.aspx        # Delivery tracking
+├── OrderTracking.aspx        # Delivery tracking timeline
+├── Wishlist.aspx             # Product wishlist
+├── Notifications.aspx        # Order notifications
 ├── Feedback.aspx             # Submit product feedback
 ├── Login.aspx                # User login
 ├── Register.aspx             # User registration
 ├── Profile.aspx              # User profile
 ├── EditProfile.aspx          # Edit profile details
 ├── ChangePassword.aspx       # Change password
+├── ReadMe.html               # Setup guide & credentials
 ├── Web.config                # Application configuration
 └── Global.asax               # Application lifecycle events
 ```
@@ -98,30 +126,42 @@ Clothify/
 ## Setup Instructions
 
 ### Prerequisites
-- Visual Studio 2019 or later
-- Microsoft SQL Server (or SQL Server Express)
-- .NET Framework 4.8
+- Visual Studio 2022 (Community or higher)
+- "ASP.NET and web development" workload installed
+- SQL Server Express LocalDB (included with Visual Studio)
 
 ### Steps
 
-1. **Create the Database**
-   - Open SQL Server Management Studio (SSMS)
-   - Execute the script at `SQL/Database.sql` to create the database, tables, and seed data
+1. **Open the Project**
+   - Open `Clothify.sln` in Visual Studio 2022
+   - Right-click solution → **Restore NuGet Packages**
 
-2. **Configure Connection String**
-   - Open `Web.config`
-   - Update the `ClothifyDB` connection string to match your SQL Server instance:
-     ```xml
-     <add name="ClothifyDB" connectionString="Server=YOUR_SERVER;Database=ClothifyDB;Trusted_Connection=True;" />
-     ```
+2. **Create the Database**
+   - Right-click `App_Data` folder → **Add** → **SQL Server Database**
+   - Name it `ClothifyDB.mdf` and click OK
+   - Double-click `ClothifyDB.mdf` to open in Server Explorer
+   - Right-click the connection → **New Query**
+   - Open `SQL/Database.sql`, paste the script, and execute (Ctrl+Shift+E)
 
 3. **Run the Application**
-   - Open `Clothify.sln` in Visual Studio
-   - Press `F5` or click **Start** to run
+   - Press `F5` or click **Start** to run with IIS Express
+   - The application opens in your default browser
 
-### Default Admin Account
-- **Email:** admin@clothify.com
-- **Password:** Admin@123
+### Default Accounts
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@clothify.com | Admin@123 |
+| Customer | *(Register a new account)* | |
+
+### Email Configuration (Optional)
+To enable email notifications, update the SMTP settings in `Web.config`:
+```xml
+<appSettings>
+    <add key="SmtpUser" value="your-email@gmail.com" />
+    <add key="SmtpPass" value="your-app-password" />
+</appSettings>
+```
 
 ## Currency
 
@@ -133,3 +173,11 @@ All prices are displayed in **Nepalese Rupees (NPR)** formatted as `Rs. X,XXX`.
 - **Fixed Navigation** – Top header with branding + bottom navigation bar (Home, Shop, Orders, Profile)
 - **Responsive** – Scales up to 768px+ for tablet/desktop viewing
 - **Accessible** – Clear form labels, validation messages, and status indicators
+
+## Browser Compatibility
+
+- Google Chrome (Recommended)
+- Microsoft Edge
+- Mozilla Firefox
+- Opera
+- Safari (macOS/iOS)

@@ -1,4 +1,4 @@
-<%@ Page Title="Notifications" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Notifications.aspx.cs" Inherits="Clothify.Notifications" %>
+<%@ Page Title="Notifications" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="Notifications.aspx.cs" Inherits="Clothify.Notifications" %>
 
 <asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">
     <style>

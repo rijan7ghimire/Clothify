@@ -1,4 +1,4 @@
-<%@ Page Title="Change Password" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ChangePassword.aspx.cs" Inherits="Clothify.ChangePassword" %>
+<%@ Page Title="Change Password" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="ChangePassword.aspx.cs" Inherits="Clothify.ChangePassword" %>
 
 <asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">
     <style>

@@ -1,4 +1,4 @@
-<%@ Page Title="Manage Products" Language="C#" MasterPageFile="~/Admin/AdminMaster.master" AutoEventWireup="true" CodeBehind="ManageProducts.aspx.cs" Inherits="Clothify.Admin.ManageProducts" %>
+<%@ Page Title="Manage Products" Language="C#" MasterPageFile="~/Admin/AdminMaster.master" AutoEventWireup="true" CodeFile="ManageProducts.aspx.cs" Inherits="Clothify.Admin.ManageProducts" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="AdminContent" runat="server">
     <style>

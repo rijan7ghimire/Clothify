@@ -1,4 +1,4 @@
-<%@ Page Title="Manage Users" Language="C#" MasterPageFile="~/Admin/AdminMaster.master" AutoEventWireup="true" CodeBehind="ManageUsers.aspx.cs" Inherits="Clothify.Admin.ManageUsers" %>
+<%@ Page Title="Manage Users" Language="C#" MasterPageFile="~/Admin/AdminMaster.master" AutoEventWireup="true" CodeFile="ManageUsers.aspx.cs" Inherits="Clothify.Admin.ManageUsers" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="AdminContent" runat="server">
     <style>

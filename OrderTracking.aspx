@@ -1,4 +1,4 @@
-<%@ Page Title="Order Tracking" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="OrderTracking.aspx.cs" Inherits="Clothify.OrderTracking" %>
+<%@ Page Title="Order Tracking" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="OrderTracking.aspx.cs" Inherits="Clothify.OrderTracking" %>
 
 <asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">
     <style>

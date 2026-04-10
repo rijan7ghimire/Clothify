@@ -1,4 +1,4 @@
-<%@ Page Title="Manage Feedback" Language="C#" MasterPageFile="~/Admin/AdminMaster.master" AutoEventWireup="true" CodeBehind="ManageFeedback.aspx.cs" Inherits="Clothify.Admin.ManageFeedback" %>
+<%@ Page Title="Manage Feedback" Language="C#" MasterPageFile="~/Admin/AdminMaster.master" AutoEventWireup="true" CodeFile="ManageFeedback.aspx.cs" Inherits="Clothify.Admin.ManageFeedback" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="AdminContent" runat="server">
     <style>

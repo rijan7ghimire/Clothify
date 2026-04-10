@@ -1,4 +1,4 @@
-<%@ Page Title="Feedback" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Feedback.aspx.cs" Inherits="Clothify.Feedback" %>
+<%@ Page Title="Feedback" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="Feedback.aspx.cs" Inherits="Clothify.Feedback" %>
 <%@ Register Src="~/Controls/StarRating.ascx" TagPrefix="uc" TagName="StarRating" %>
 <%@ Register Src="~/Controls/NotificationBar.ascx" TagPrefix="uc" TagName="NotificationBar" %>
 

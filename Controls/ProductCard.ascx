@@ -1,4 +1,4 @@
-<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ProductCard.ascx.cs" Inherits="Clothify.Controls.ProductCardControl" %>
+<%@ Control Language="C#" AutoEventWireup="true" CodeFile="ProductCard.ascx.cs" Inherits="Clothify.Controls.ProductCardControl" %>
 
 <div class="product-card">
     <a href='<%# ResolveUrl("~/ProductDetail.aspx?id=" + ProductID) %>'>

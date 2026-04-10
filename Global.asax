@@ -1,1 +1,1 @@
-<%@ Application Codebehind="Global.asax.cs" Inherits="Clothify.Global" Language="C#" %>
+<%@ Application CodeFile="Global.asax.cs" Inherits="Clothify.Global" Language="C#" %>

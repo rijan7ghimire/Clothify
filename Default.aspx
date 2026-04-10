@@ -1,4 +1,4 @@
-<%@ Page Title="Home" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="Clothify._Default" %>
+<%@ Page Title="Home" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="Clothify._Default" %>
 <%@ Register Src="~/Controls/ProductCard.ascx" TagPrefix="uc" TagName="ProductCard" %>
 <%@ Register Src="~/Controls/NotificationBar.ascx" TagPrefix="uc" TagName="NotificationBar" %>
 

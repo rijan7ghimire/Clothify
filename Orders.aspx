@@ -1,4 +1,4 @@
-<%@ Page Title="Orders" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Orders.aspx.cs" Inherits="Clothify.Orders" %>
+<%@ Page Title="Orders" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeFile="Orders.aspx.cs" Inherits="Clothify.Orders" %>
 <%@ Register Src="~/Controls/OrderStatusBadge.ascx" TagPrefix="uc" TagName="OrderStatusBadge" %>
 
 <asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">

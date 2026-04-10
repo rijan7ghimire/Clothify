@@ -15,17 +15,15 @@ namespace Clothify.Controls
             {
                 pnlNotification.Visible = true;
                 lblMessage.Text = Message;
-                DataBind();
             }
         }
 
-        public void Show(string message, string type = "info")
+        public void Show(string message, string type)
         {
             Message = message;
             MessageType = type;
             pnlNotification.Visible = true;
             lblMessage.Text = message;
-            DataBind();
         }
     }
 }

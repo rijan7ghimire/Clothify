@@ -7,11 +7,6 @@ namespace Clothify.Controls
     {
         public int Rating { get; set; }
 
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            DataBind();
-        }
-
         public string GetStars()
         {
             string stars = "";

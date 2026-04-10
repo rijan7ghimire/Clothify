@@ -13,11 +13,6 @@ namespace Clothify.Controls
 
         public event EventHandler AddToCartClicked;
 
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            DataBind();
-        }
-
         protected void btnAddToCart_Click(object sender, EventArgs e)
         {
             if (AddToCartClicked != null)

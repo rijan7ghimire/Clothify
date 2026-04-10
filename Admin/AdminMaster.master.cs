@@ -16,8 +16,8 @@ namespace Clothify.Admin
                 return;
             }
 
-            // Check if user has admin role
-            if (Session["UserRole"] == null || Session["UserRole"].ToString().ToLower() != "admin")
+            // Check if user has admin role (RoleID 1 = Admin)
+            if (Session["RoleID"] == null || Convert.ToInt32(Session["RoleID"]) != 1)
             {
                 Response.Redirect("~/Login.aspx");
                 return;

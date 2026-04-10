@@ -138,7 +138,7 @@ namespace Clothify.Admin
                     {
                         // Load order items
                         DataTable dtItems = DBHelper.ExecuteQuery(
-                            @"SELECT oi.Quantity, oi.Price, (oi.Quantity * oi.Price) AS SubTotal, p.ProductName
+                            @"SELECT oi.Quantity, oi.UnitPrice, (oi.Quantity * oi.UnitPrice) AS SubTotal, p.ProductName
                               FROM OrderItems oi
                               INNER JOIN Products p ON oi.ProductID = p.ProductID
                               WHERE oi.OrderID = @OrderID",

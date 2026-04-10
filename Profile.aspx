@@ -130,8 +130,20 @@
         </div>
 
         <div class="profile-menu">
-            <a href="#" class="profile-menu-item">
-                <span>SAVED ADDRESSES</span>
+            <a href="Orders.aspx" class="profile-menu-item">
+                <span>MY ORDERS</span>
+                <span class="arrow">&rarr;</span>
+            </a>
+            <a href="Wishlist.aspx" class="profile-menu-item">
+                <span>MY WISHLIST</span>
+                <span class="arrow">&rarr;</span>
+            </a>
+            <a href="Feedback.aspx" class="profile-menu-item">
+                <span>GIVE FEEDBACK</span>
+                <span class="arrow">&rarr;</span>
+            </a>
+            <a href="Notifications.aspx" class="profile-menu-item">
+                <span>NOTIFICATIONS</span>
                 <span class="arrow">&rarr;</span>
             </a>
             <a href="EditProfile.aspx" class="profile-menu-item">

@@ -30,7 +30,7 @@ namespace Clothify
 
             try
             {
-                string query = "SELECT UserID, FullName, Email, Phone, PasswordHash, RoleID FROM Users WHERE Email = @Input OR Phone = @Input";
+                string query = "SELECT UserID, FullName, Email, PhoneNumber, PasswordHash, RoleID FROM Users WHERE Email = @Input OR PhoneNumber = @Input";
                 DataRow user = DBHelper.ExecuteSingleRow(query, new SqlParameter("@Input", emailOrPhone));
 
                 if (user == null)

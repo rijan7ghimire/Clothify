@@ -32,14 +32,14 @@ namespace Clothify
 
             int userId = Convert.ToInt32(Session["UserID"]);
 
-            string query = "SELECT FullName, Email, Phone FROM Users WHERE UserID = @UserID";
+            string query = "SELECT FullName, Email, PhoneNumber FROM Users WHERE UserID = @UserID";
             DataRow user = DBHelper.ExecuteSingleRow(query, new SqlParameter("@UserID", userId));
 
             if (user != null)
             {
                 lblFullName.Text = user["FullName"].ToString();
                 lblEmail.Text = user["Email"].ToString();
-                lblPhone.Text = user["Phone"] != DBNull.Value ? user["Phone"].ToString() : "";
+                lblPhone.Text = user["PhoneNumber"] != DBNull.Value ? user["PhoneNumber"].ToString() : "";
             }
         }
 

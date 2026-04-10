@@ -56,14 +56,14 @@ namespace Clothify
                 string hashedPassword = PasswordHelper.HashPassword(password);
 
                 // Insert new user with RoleID=2 (Customer)
-                string insertQuery = @"INSERT INTO Users (FullName, Email, Phone, PasswordHash, RoleID, CreatedAt)
-                                       VALUES (@FullName, @Email, @Phone, @PasswordHash, 2, GETDATE());
+                string insertQuery = @"INSERT INTO Users (FullName, Email, PhoneNumber, PasswordHash, RoleID, CreatedAt)
+                                       VALUES (@FullName, @Email, @PhoneNumber, @PasswordHash, 2, GETDATE());
                                        SELECT SCOPE_IDENTITY();";
 
                 object newIdObj = DBHelper.ExecuteScalar(insertQuery,
                     new SqlParameter("@FullName", fullName),
                     new SqlParameter("@Email", email),
-                    new SqlParameter("@Phone", phone),
+                    new SqlParameter("@PhoneNumber", phone),
                     new SqlParameter("@PasswordHash", hashedPassword)
                 );
 

@@ -31,14 +31,14 @@ namespace Clothify
 
             int userId = Convert.ToInt32(Session["UserID"]);
 
-            string query = "SELECT FullName, Email, Phone FROM Users WHERE UserID = @UserID";
+            string query = "SELECT FullName, Email, PhoneNumber FROM Users WHERE UserID = @UserID";
             DataRow user = DBHelper.ExecuteSingleRow(query, new SqlParameter("@UserID", userId));
 
             if (user != null)
             {
                 txtFullName.Text = user["FullName"].ToString();
                 txtEmail.Text = user["Email"].ToString();
-                txtPhone.Text = user["Phone"] != DBNull.Value ? user["Phone"].ToString() : "";
+                txtPhone.Text = user["PhoneNumber"] != DBNull.Value ? user["PhoneNumber"].ToString() : "";
             }
         }
 
@@ -63,10 +63,10 @@ namespace Clothify
             {
                 int userId = Convert.ToInt32(Session["UserID"]);
 
-                string updateQuery = "UPDATE Users SET FullName = @FullName, Phone = @Phone WHERE UserID = @UserID";
+                string updateQuery = "UPDATE Users SET FullName = @FullName, PhoneNumber = @PhoneNumber WHERE UserID = @UserID";
                 DBHelper.ExecuteNonQuery(updateQuery,
                     new SqlParameter("@FullName", fullName),
-                    new SqlParameter("@Phone", phone),
+                    new SqlParameter("@PhoneNumber", phone),
                     new SqlParameter("@UserID", userId)
                 );
 

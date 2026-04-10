@@ -1,0 +1,12 @@
+namespace Clothify
+{
+    public partial class Products
+    {
+        protected global::System.Web.UI.WebControls.TextBox txtSearch;
+        protected global::System.Web.UI.WebControls.Button btnSearch;
+        protected global::System.Web.UI.WebControls.Repeater rptCategories;
+        protected global::System.Web.UI.WebControls.Label lblSearchInfo;
+        protected global::System.Web.UI.WebControls.DataList dlProducts;
+        protected global::System.Web.UI.WebControls.Panel pnlNoProducts;
+    }
+}
